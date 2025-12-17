@@ -1,0 +1,4483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Client CANAL+ | Gérer mon abonnement</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📺</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Cookie Consent Modal */
+        .cookie-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cookie-modal-overlay.active {
+            display: flex;
+        }
+
+        .cookie-modal {
+            background: #ffffff;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            padding: 40px;
+            text-align: center;
+            color: #1a1a1a;
+        }
+
+        .cookie-modal-logo {
+            font-size: 32px;
+            font-weight: 900;
+            color: #000000;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .cookie-modal-logo span {
+            color: #e60000;
+        }
+
+        .cookie-modal h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .cookie-modal h2::before {
+            content: "🔒";
+        }
+
+        .cookie-modal p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .cookie-modal a {
+            color: #0066cc;
+            text-decoration: underline;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cookie-btn {
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .cookie-btn-learn {
+            background: transparent;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+
+        .cookie-btn-learn:hover {
+            background: #f5f5f5;
+        }
+
+        .cookie-btn-reject {
+            background: transparent;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+
+        .cookie-btn-reject:hover {
+            background: #f5f5f5;
+        }
+
+        .cookie-btn-accept {
+            background: #e60000;
+            color: white;
+        }
+
+        .cookie-btn-accept:hover {
+            background: #cc0000;
+        }
+
+        /* Blur content when cookie modal is shown */
+        .blur-content {
+            filter: blur(5px);
+            pointer-events: none;
+        }
+
+        /* Header */
+        .header {
+            background: #000000;
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ffffff;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: #e60000;
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .main-nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .main-nav a:hover {
+            opacity: 0.7;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .offers-btn {
+            background: #e60000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .offers-btn:hover {
+            background: #cc0000;
+        }
+
+        .profile-btn {
+            background: none;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            position: relative;
+        }
+
+        .profile-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Profile Dropdown */
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: #ffffff;
+            border-radius: 8px;
+            width: 320px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+        }
+
+        .profile-dropdown.active {
+            display: block;
+        }
+
+        .dropdown-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dropdown-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .dropdown-header p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .dropdown-login-btn {
+            width: 100%;
+            background: #e60000;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .dropdown-login-btn:hover {
+            background: #cc0000;
+        }
+
+        .dropdown-menu {
+            padding: 12px 0;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .dropdown-item:hover {
+            background: #f5f5f5;
+        }
+
+        .dropdown-item-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* Hero Section with Dots Pattern */
+        .hero-section {
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+            padding: 60px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* Login Section */
+        .login-section {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .login-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 32px;
+            color: #1a1a1a;
+        }
+
+        .login-card h2 {
+            font-size: 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        .login-card p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .login-btn {
+            background: #e60000;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+        }
+
+        .login-btn:hover {
+            background: #cc0000;
+        }
+
+        .login-image {
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            position: relative;
+        }
+
+        .login-image-placeholder {
+            font-size: 120px;
+            opacity: 0.3;
+        }
+
+        /* Features Section */
+        .features-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 60px;
+        }
+
+        .feature-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: #e60000;
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* Club Section */
+        .club-section {
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .club-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 16px 16px;
+            pointer-events: none;
+        }
+
+        .club-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .club-badge {
+            display: inline-block;
+            background: #e60000;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .club-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .club-subtitle {
+            font-size: 18px;
+            color: #e60000;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .club-description {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 24px;
+            max-width: 500px;
+        }
+
+        .club-btn {
+            background: #ffffff;
+            color: #1a1a1a;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .club-btn:hover {
+            background: #f0f0f0;
+        }
+
+        /* Help Section */
+        .help-section {
+            margin-bottom: 60px;
+        }
+
+        .help-title {
+            font-size: 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .help-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px 32px;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .help-card-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .help-icon {
+            width: 50px;
+            height: 50px;
+            background: #e6f3ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .help-text h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .help-text p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .help-btn {
+            background: #e60000;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .help-btn:hover {
+            background: #cc0000;
+        }
+
+        /* Footer */
+        .footer {
+            background: #ffffff;
+            color: #1a1a1a;
+            padding: 40px 24px;
+            border-top: 4px solid #e60000;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #1a1a1a;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 8px;
+        }
+
+        .footer-column a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+
+        .footer-column a:hover {
+            color: #e60000;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+
+        .social-icon:hover {
+            background: #e0e0e0;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 24px;
+            border-top: 1px solid #eee;
+        }
+
+        .footer-logo {
+            font-size: 18px;
+            font-weight: 900;
+            color: #1a1a1a;
+        }
+
+        .footer-logo span {
+            color: #e60000;
+        }
+
+        .footer-copyright {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Login Modal */
+        .login-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-modal-overlay.active {
+            display: flex;
+        }
+
+        .login-modal {
+            background: #ffffff;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 440px;
+            color: #1a1a1a;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-modal-header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            padding: 32px;
+            text-align: center;
+            color: white;
+        }
+
+        .login-modal-logo {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .login-modal-logo span {
+            color: #e60000;
+        }
+
+        .login-modal-subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .login-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .login-modal-body {
+            padding: 32px;
+        }
+
+        .login-step {
+            display: none;
+        }
+
+        .login-step.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #e60000;
+        }
+
+        .form-input::placeholder {
+            color: #999;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .login-submit-btn {
+            width: 100%;
+            background: #e60000;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .login-submit-btn:hover {
+            background: #cc0000;
+        }
+
+        .login-submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .forgot-password a {
+            color: #e60000;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .back-link:hover {
+            color: #333;
+        }
+
+        .welcome-text {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        .welcome-email {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Logged in state */
+        .profile-logged-in {
+            display: none;
+        }
+
+        .profile-logged-in.active {
+            display: flex;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            background: #e60000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+        }
+
+        .logged-in-dropdown {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: #ffffff;
+            border-radius: 8px;
+            width: 280px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .logged-in-dropdown.active {
+            display: block;
+        }
+
+        .logged-in-header {
+            padding: 20px;
+            background: #f5f5f5;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logged-in-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .logged-in-email {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .logged-in-menu {
+            padding: 8px 0;
+        }
+
+        .logged-in-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .logged-in-item:hover {
+            background: #f5f5f5;
+        }
+
+        .logged-in-item.logout {
+            border-top: 1px solid #eee;
+            color: #e60000;
+        }
+
+        /* Abonnement Page Styles */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .abonnement-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .abonnement-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-button {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #333;
+            border-radius: 50%;
+            background: transparent;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+        }
+
+        .abonnement-title {
+            font-size: 36px;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-style: italic;
+        }
+
+        .subscriber-number {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .subscriber-number span {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .section-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+            color: #1a1a1a;
+        }
+
+        .section-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .section-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .section-card-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .formule-item {
+            padding: 16px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .formule-item:last-of-type {
+            border-bottom: none;
+        }
+
+        .formule-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .formule-name {
+            font-size: 16px;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .formule-name span {
+            color: #e60000;
+        }
+
+        .formule-details {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .formule-price {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-align: right;
+        }
+
+        .formule-note {
+            font-size: 13px;
+            color: #666;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+        }
+
+        .action-btn {
+            background: #e60000;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .action-btn:hover {
+            background: #cc0000;
+        }
+
+        .detail-link {
+            color: #e60000;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .detail-link:hover {
+            text-decoration: underline;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+        }
+
+        .option-icon {
+            width: 48px;
+            height: 48px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .option-info h4 {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .option-info p {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .platforms-empty {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Mes Demarches Section */
+        .demarches-section {
+            margin-top: 60px;
+            margin-bottom: 40px;
+        }
+
+        .demarches-title {
+            font-size: 28px;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .demarches-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 24px;
+        }
+
+        .resilier-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+
+        .resilier-text h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .resilier-text p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .resilier-btn {
+            background: #ffffff;
+            color: #1a1a1a;
+            border: 2px solid #1a1a1a;
+            padding: 14px 32px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+        }
+
+        .resilier-btn:hover {
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .conditions-link {
+            color: #e60000;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .conditions-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Chat Button */
+        .chat-button {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            background: #1a1a1a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            border: none;
+            color: white;
+            font-size: 24px;
+            transition: transform 0.2s;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Résiliation Page Styles */
+        .resilier-page {
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .resilier-header {
+            background: #1a1a1a;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .resilier-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .resilier-logo-text {
+            font-size: 24px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1px;
+        }
+
+        .resilier-logo-text span {
+            color: #e60000;
+        }
+
+        .resilier-logo-subtitle {
+            font-size: 14px;
+            color: #999;
+            font-weight: 400;
+        }
+
+        .resilier-secure {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .resilier-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .resilier-title {
+            font-size: 32px;
+            font-weight: 900;
+            font-style: italic;
+            color: #1a1a1a;
+            margin-bottom: 24px;
+        }
+
+        .commitment-banner {
+            background: #f0f0f0;
+            border-radius: 8px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            color: #1a1a1a;
+        }
+
+        .commitment-banner .info-icon {
+            width: 24px;
+            height: 24px;
+            background: #666;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .personal-info-card {
+            background: #e8e8e8;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 32px;
+        }
+
+        .personal-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .personal-info-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .personal-info-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .modify-link {
+            color: #e60000;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .personal-info-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            color: #1a1a1a;
+            font-size: 14px;
+        }
+
+        .personal-info-details strong {
+            font-weight: 600;
+        }
+
+        .reasons-section {
+            margin-bottom: 32px;
+        }
+
+        .reasons-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .reason-item {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 0;
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: #1a1a1a;
+            font-size: 15px;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+        }
+
+        .reason-item:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .reason-item:last-child {
+            border-radius: 0 0 8px 8px;
+        }
+
+        .reason-item:not(:last-child) {
+            border-bottom: none;
+        }
+
+        .reason-item:hover {
+            background: #f8f8f8;
+        }
+
+        .reason-item:focus {
+            outline: 2px solid #e60000;
+            outline-offset: -2px;
+        }
+
+        .reason-arrow {
+            color: #999;
+            font-size: 18px;
+        }
+
+        .callback-option {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .callback-option a {
+            color: #e60000;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .cancel-btn {
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            padding: 16px 48px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .cancel-btn:hover {
+            background: #333;
+        }
+
+        /* Back Button for inner pages */
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: #fff;
+            font-size: 28px;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .back-btn:hover {
+            border-color: #1a1a1a;
+            color: #1a1a1a;
+        }
+
+        /* Red CTA Button for inner pages */
+        .btn-cta-red {
+            background: #e60000;
+            color: #fff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-cta-red:hover {
+            background: #cc0000;
+        }
+
+        /* Contact Page Styles */
+        .contact-page-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #f5f5f5;
+            min-height: calc(100vh - 60px);
+        }
+
+        .contact-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .contact-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .contact-title {
+            font-size: 36px;
+            font-weight: 900;
+            font-style: italic;
+            color: #1a1a1a;
+        }
+
+        .subscriber-number {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .subscriber-number strong {
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .contact-section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .contact-section-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-top: -12px;
+            margin-bottom: 16px;
+        }
+
+        .assistant-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .assistant-card-left {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .assistant-icon {
+            width: 48px;
+            height: 48px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #666;
+        }
+
+        .assistant-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .assistant-info p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .demarche-list {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .demarche-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: background 0.2s;
+            background: none;
+            border-left: none;
+            border-right: none;
+            border-top: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .demarche-item:last-child {
+            border-bottom: none;
+        }
+
+        .demarche-item:hover {
+            background: #f9f9f9;
+        }
+
+        .demarche-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .demarche-icon.document { color: #e60000; }
+        .demarche-icon.technical { color: #e60000; }
+        .demarche-icon.cancel { color: #e60000; }
+
+        .demarche-info {
+            flex: 1;
+        }
+
+        .demarche-info h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .demarche-info p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .demarche-arrow {
+            font-size: 18px;
+            color: #999;
+            margin-left: 16px;
+        }
+
+        .communications-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 40px;
+        }
+
+        .communication-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .communication-tag {
+            background: #f5f5f5;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .communication-date {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .communication-text {
+            font-size: 15px;
+            color: #1a1a1a;
+            margin-top: 12px;
+        }
+
+        .communication-text strong {
+            font-weight: 600;
+        }
+
+        .help-section-title {
+            font-size: 24px;
+            font-weight: 900;
+            font-style: italic;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .help-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .help-icon {
+            width: 56px;
+            height: 56px;
+            background: #f5f5f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #666;
+        }
+
+        /* Paiement Page Styles */
+        .paiement-page-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #f5f5f5;
+            min-height: calc(100vh - 60px);
+        }
+
+        .paiement-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .paiement-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .paiement-title {
+            font-size: 36px;
+            font-weight: 900;
+            font-style: italic;
+            color: #1a1a1a;
+        }
+
+        .payment-info-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 40px;
+        }
+
+        .payment-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .payment-info-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .payment-card-details {
+            font-size: 15px;
+            color: #1a1a1a;
+        }
+
+        .payment-card-details .card-number {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .payment-card-details .expiry {
+            color: #666;
+        }
+
+        .paiement-section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .next-payment-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 24px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .next-payment-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .next-payment-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #e60000;
+        }
+
+        .next-payment-info h4 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .next-payment-info .amount {
+            font-size: 16px;
+            color: #1a1a1a;
+        }
+
+        .payment-note {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .btn-mensualites {
+            background: #fff;
+            color: #1a1a1a;
+            border: 2px solid #1a1a1a;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 40px;
+        }
+
+        .btn-mensualites:hover {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .facturation-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 24px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .facturation-card:hover {
+            background: #f9f9f9;
+        }
+
+        .facturation-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .facturation-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #666;
+        }
+
+        .facturation-info h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .facturation-info p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Confirmation Resilier Page Styles */
+        .confirm-resilier-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .confirm-resilier-title {
+            font-size: 32px;
+            font-weight: 900;
+            font-style: italic;
+            color: #1a1a1a;
+            margin-bottom: 32px;
+        }
+
+        .formule-summary-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 32px;
+        }
+
+        .formule-summary-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .formule-summary-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .formule-summary-name span {
+            color: #e60000;
+        }
+
+        .formule-summary-option {
+            font-size: 14px;
+            color: #666;
+            padding-top: 12px;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 12px;
+        }
+
+        .end-date-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 32px;
+        }
+
+        .confirm-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .btn-rester {
+            background: #fff;
+            color: #1a1a1a;
+            border: 2px solid #e0e0e0;
+            padding: 16px 48px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-rester:hover {
+            border-color: #1a1a1a;
+            background: #f5f5f5;
+        }
+
+        .btn-resilier-confirm {
+            background: #e60000;
+            color: #fff;
+            border: none;
+            padding: 16px 48px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-resilier-confirm:hover {
+            background: #cc0000;
+        }
+
+        /* Gerer Mon Offre Page Styles */
+        .gerer-offre-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .gerer-offre-title {
+            font-size: 32px;
+            font-weight: 900;
+            font-style: italic;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .gerer-offre-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 32px;
+        }
+
+        .subscription-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 16px;
+        }
+
+        .subscription-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 4px;
+        }
+
+        .subscription-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1a1a1a;
+        }
+
+        .subscription-name span {
+            color: #e60000;
+        }
+
+        .subscription-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .subscription-price small {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .subscription-type {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .subscription-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subscription-link {
+            color: #e60000;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .subscription-btn-remove {
+            background: #f0f0f0;
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .subscription-btn-remove:hover {
+            background: #e0e0e0;
+        }
+
+        .adult-programs-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 24px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+        }
+
+        .adult-programs-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1a1a1a;
+        }
+
+        .adult-programs-btn {
+            background: #e60000;
+            color: #fff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .adult-programs-btn:hover {
+            background: #cc0000;
+        }
+
+        /* Changer Mon Offre Page Styles */
+        .offres-page {
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .offres-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .offres-title {
+            font-size: 32px;
+            font-weight: 900;
+            font-style: italic;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .offres-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 32px;
+        }
+
+        .offres-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+
+        .current-offer-card {
+            background: #fff;
+            border: 2px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .current-offer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .current-offer-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .current-offer-name span {
+            color: #e60000;
+        }
+
+        .current-offer-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .current-offer-price small {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .current-offer-type {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .current-offer-link {
+            color: #e60000;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .compare-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .compare-card-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .compare-icon {
+            font-size: 24px;
+        }
+
+        .compare-text {
+            font-size: 15px;
+            color: #1a1a1a;
+        }
+
+        .compare-link {
+            color: #e60000;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .offer-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 20px;
+        }
+
+        .offer-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .offer-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1a1a1a;
+        }
+
+        .offer-name span {
+            color: #e60000;
+        }
+
+        .offer-price-section {
+            text-align: right;
+        }
+
+        .offer-price {
+            font-size: 36px;
+            font-weight: 800;
+            color: #1a1a1a;
+        }
+
+        .offer-price small {
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .offer-price-type {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .offer-channels {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .channel-badge {
+            background: #f0f0f0;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .channel-badge.canal {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .channel-badge.canal span {
+            color: #e60000;
+        }
+
+        .channel-badge.sport {
+            background: #e60000;
+            color: #fff;
+        }
+
+        .channel-badge.apple {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .channel-badge.ocs {
+            background: #ff6b00;
+            color: #fff;
+        }
+
+        .channel-badge.cine {
+            background: #ffd700;
+            color: #1a1a1a;
+        }
+
+        .channel-more {
+            color: #999;
+            font-size: 18px;
+        }
+
+        .offer-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .offer-link {
+            color: #e60000;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .offer-cta-btn {
+            background: #e60000;
+            color: #fff;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .offer-cta-btn:hover {
+            background: #cc0000;
+        }
+
+        /* Gerer Ma Formule Modal */
+        .formule-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .formule-modal-overlay.active {
+            display: flex;
+        }
+
+        .formule-modal {
+            background: #fff;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 90%;
+            padding: 48px;
+            position: relative;
+            color: #1a1a1a;
+        }
+
+        .formule-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #666;
+            transition: background 0.2s;
+        }
+
+        .formule-modal-close:hover {
+            background: #f0f0f0;
+        }
+
+        .formule-modal-title {
+            font-size: 28px;
+            font-weight: 900;
+            font-style: italic;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .formule-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .formule-option:hover {
+            border-color: #ccc;
+        }
+
+        .formule-option-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .formule-option-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #666;
+        }
+
+        .formule-option-text {
+            font-size: 16px;
+            color: #1a1a1a;
+            max-width: 300px;
+        }
+
+        .formule-btn-red {
+            background: #e60000;
+            color: #fff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .formule-btn-red:hover {
+            background: #cc0000;
+        }
+
+        .formule-btn-dark {
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .formule-btn-dark:hover {
+            background: #333;
+        }
+
+        /* Retention Modal */
+        .retention-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .retention-modal-overlay.active {
+            display: flex;
+        }
+
+        .retention-modal {
+            background: #fff;
+            border-radius: 12px;
+            max-width: 650px;
+            width: 90%;
+            padding: 40px;
+            position: relative;
+            color: #1a1a1a;
+        }
+
+        .retention-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .retention-modal-title {
+            font-size: 26px;
+            font-weight: 900;
+            font-style: italic;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .retention-modal-subtitle {
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .retention-modal-subtitle strong {
+            font-weight: 600;
+        }
+
+        .retention-info-box {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .retention-info-icon {
+            width: 24px;
+            height: 24px;
+            background: #1a1a1a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .retention-info-content {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .retention-info-content strong {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .retention-cta-btn {
+            background: #e60000;
+            color: #fff;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .retention-cta-btn:hover {
+            background: #cc0000;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .login-section {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-nav {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 28px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .help-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            .help-card-content {
+                flex-direction: column;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resilier-card {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .section-card-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .section-card-actions {
+                align-items: flex-start;
+            }
+
+            .abonnement-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cookie Consent Modal -->
+    <div class="cookie-modal-overlay" id="cookieModal">
+        <div class="cookie-modal">
+            <div class="cookie-modal-logo">CANAL<span>+</span></div>
+            <h2>Nous respectons la vie privée de nos utilisateurs</h2>
+            <p>
+                Avec votre accord, nous et <a href="#">nos 159 partenaires</a> utilisons des cookies ou technologies similaires pour stocker, consulter et traiter des données personnelles telles que votre visite sur ce site web, les adresses IP et les identifiants des cookies. Vous pouvez retirer votre consentement ou vous opposer au traitement des données à tout moment en cliquant sur "En savoir plus" ou dans notre Politique de confidentialité sur ce site.
+            </p>
+            <div class="cookie-buttons">
+                <button class="cookie-btn cookie-btn-learn" onclick="handleLearnMore()">En savoir plus →</button>
+                <button class="cookie-btn cookie-btn-reject" onclick="handleRejectCookies()">Refuser</button>
+                <button class="cookie-btn cookie-btn-accept" onclick="handleAcceptCookies()">Accepter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="login-modal-overlay" id="loginModal">
+        <div class="login-modal">
+            <div class="login-modal-header">
+                <button class="login-modal-close" onclick="closeLoginModal()">×</button>
+                <div class="login-modal-logo">CANAL<span>+</span></div>
+                <div class="login-modal-subtitle">Espace Client</div>
+            </div>
+            <div class="login-modal-body">
+                <!-- Step 1: Email -->
+                <div class="login-step active" id="loginStep1">
+                    <div class="form-group">
+                        <label class="form-label">Adresse e-mail ou identifiant</label>
+                        <input type="email" class="form-input" id="emailInput" placeholder="exemple@mail.com">
+                    </div>
+                    <button class="login-submit-btn" id="continueBtn" onclick="goToPasswordStep()" disabled>Continuer</button>
+                </div>
+
+                <!-- Step 2: Password -->
+                <div class="login-step" id="loginStep2">
+                    <div class="back-link" onclick="goBackToEmail()">
+                        ← Étape précédente
+                    </div>
+                    <div class="welcome-text">
+                        Bon retour parmi nous !<br>
+                        <span class="welcome-email" id="welcomeEmail"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mot de passe</label>
+                        <div class="password-wrapper">
+                            <input type="password" class="form-input" id="passwordInput" placeholder="Entrez votre mot de passe">
+                            <button class="password-toggle" onclick="togglePassword()">👁️</button>
+                        </div>
+                    </div>
+                    <button class="login-submit-btn" onclick="handleLogin()">Se connecter</button>
+                    <div class="forgot-password">
+                        <a href="#" onclick="handleForgotPassword()">Mot de passe oublié ?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <div id="mainContent">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <a href="#" class="logo" onclick="trackNavigation('logo')">CANAL<span>+</span></a>
+                <nav class="main-nav">
+                    <a href="#" onclick="trackNavigation('Découvrir')">Découvrir</a>
+                    <a href="#" onclick="trackNavigation('TV')">TV</a>
+                    <a href="#" onclick="trackNavigation('Sport')">Sport</a>
+                    <a href="#" onclick="trackNavigation('Divertissement')">Divertissement</a>
+                    <a href="#" onclick="trackNavigation('Séries')">Séries</a>
+                    <a href="#" onclick="trackNavigation('Cinéma')">Cinéma</a>
+                    <a href="#" onclick="trackNavigation('Docs')">Docs</a>
+                    <a href="#" onclick="trackNavigation('Jeunesse')">Jeunesse</a>
+                    <a href="#" onclick="trackNavigation('Chaînes')">Chaînes</a>
+                </nav>
+            </div>
+            <div class="header-right">
+                <button class="offers-btn" onclick="trackCTA('NOS OFFRES', 'header')">NOS OFFRES</button>
+                
+                <!-- Logged out state -->
+                <div class="profile-container" id="profileLoggedOut">
+                    <button class="profile-btn" onclick="toggleProfileDropdown()">👤</button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="dropdown-header">
+                            <h3>Compte CANAL+</h3>
+                            <p>Connectez-vous pour accéder à vos programmes et services</p>
+                            <button class="dropdown-login-btn" onclick="openLoginModal('dropdown')">Se connecter</button>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" onclick="trackDropdownItem('Nos offres')">
+                                <span class="dropdown-item-icon">📦</span>
+                                Nos offres
+                            </a>
+                            <a class="dropdown-item" onclick="trackDropdownItem('Espace client')">
+                                <span class="dropdown-item-icon">👤</span>
+                                Espace client
+                            </a>
+                            <a class="dropdown-item" onclick="trackDropdownItem('Assistance')">
+                                <span class="dropdown-item-icon">❓</span>
+                                Assistance
+                            </a>
+                            <a class="dropdown-item" onclick="trackDropdownItem('Fonctionnalités')">
+                                <span class="dropdown-item-icon">⚙️</span>
+                                Fonctionnalités
+                            </a>
+                            <a class="dropdown-item" onclick="trackDropdownItem('CANAL+ Responsable')">
+                                <span class="dropdown-item-icon">🌱</span>
+                                CANAL+ Responsable
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logged in state -->
+                <div class="profile-container profile-logged-in" id="profileLoggedIn">
+                    <div class="profile-avatar" id="userAvatar" onclick="toggleLoggedInDropdown()">GG</div>
+                    <div class="logged-in-dropdown" id="loggedInDropdown">
+                        <div class="logged-in-header">
+                            <div class="logged-in-name" id="userName">Giuliano Giannini</div>
+                            <div class="logged-in-email" id="userEmailDisplay">giuliano@example.com</div>
+                        </div>
+                        <div class="logged-in-menu">
+                            <a class="logged-in-item" onclick="trackProfileMenu('Mon compte')">
+                                <span>👤</span> Mon compte
+                            </a>
+                            <a class="logged-in-item" onclick="trackProfileMenu('Mes abonnements')">
+                                <span>📦</span> Mes abonnements
+                            </a>
+                            <a class="logged-in-item" onclick="trackProfileMenu('Mes appareils')">
+                                <span>📱</span> Mes appareils
+                            </a>
+                            <a class="logged-in-item" onclick="trackProfileMenu('Paramètres')">
+                                <span>⚙️</span> Paramètres
+                            </a>
+                            <a class="logged-in-item logout" onclick="handleLogout()">
+                                <span>🚪</span> Se déconnecter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- PAGE: Home / Espace Client -->
+        <div class="page active" id="pageHome">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1 class="hero-title">Espace Client CANAL+</h1>
+                    <p class="hero-subtitle">Bienvenue</p>
+                </div>
+            </section>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Login Section -->
+                <section class="login-section" id="loginSection">
+                    <div class="login-card">
+                        <h2>Identifiez-vous</h2>
+                        <p>
+                            L'espace client CANAL+ est votre espace personnel sécurisé.
+                        </p>
+                        <p>
+                            Particulier ? ou Professionnel ? Connectez-vous avec votre identifiant et votre mot de passe.
+                        </p>
+                        <button class="login-btn" onclick="openLoginModal('hero')">SE CONNECTER</button>
+                    </div>
+                    <div class="login-image">
+                        <div class="login-image-placeholder">🎬</div>
+                    </div>
+                </section>
+
+                <!-- Features Section -->
+                <h2 class="features-title">Les principales fonctionnalités de votre Espace Client</h2>
+                <div class="features-grid">
+                    <button class="feature-card" onclick="navigateToAbonnement()" aria-label="Consulter ou gérer votre abonnement">
+                        <div class="feature-icon">📄</div>
+                        <p>Consulter ou gérer votre abonnement.</p>
+                    </button>
+                    <button class="feature-card" onclick="trackFeature('materiel')" aria-label="Consulter ou gérer votre matériel">
+                        <div class="feature-icon">📺</div>
+                        <p>Consulter ou gérer votre matériel.</p>
+                    </button>
+                    <button class="feature-card" onclick="navigateToPaiement()" aria-label="Consulter votre historique et votre échéancier">
+                        <div class="feature-icon">📊</div>
+                        <p>Consulter votre historique et votre échéancier.</p>
+                    </button>
+                    <button class="feature-card" onclick="navigateToContact()" aria-label="Contacter le Service Client CANAL+">
+                        <div class="feature-icon">📞</div>
+                        <p>Contacter le Service Client CANAL+.</p>
+                    </button>
+                </div>
+
+                <!-- Club Section -->
+                <section class="club-section">
+                    <div class="club-content">
+                        <span class="club-badge">EXCLUSIF</span>
+                        <h2 class="club-title">CANAL+ LE CLUB</h2>
+                        <p class="club-subtitle">VOUS GÂTE TOUTE L'ANNÉE !</p>
+                        <p class="club-description">
+                            Chaque semaine, profitez d'avantages et de jeux-concours qui vous sont réservés ! Avant-premières, matchs, spectacles...
+                        </p>
+                        <button class="club-btn" onclick="trackCTA('EN DÉCOUVRIR PLUS', 'club')">EN DÉCOUVRIR PLUS</button>
+                    </div>
+                </section>
+
+                <!-- Help Section -->
+                <section class="help-section">
+                    <h2 class="help-title">Besoin d'aide ?</h2>
+                    <div class="help-card">
+                        <div class="help-card-content">
+                            <div class="help-icon">💬</div>
+                            <div class="help-text">
+                                <h3>Assistance CANAL+</h3>
+                                <p>Échangez avec d'autres abonnés sur le forum, partagez vos idées, consultez nos FAQ, informez-vous des derniers incidents.</p>
+                            </div>
+                        </div>
+                        <button class="help-btn" onclick="trackCTA('VOIR L\'ASSISTANCE', 'help')">VOIR L'ASSISTANCE</button>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- PAGE: Abonnement -->
+        <div class="page" id="pageAbonnement">
+            <main class="main-content" style="padding-top: 40px;">
+                <!-- Abonnement Header -->
+                <div class="abonnement-header">
+                    <div class="abonnement-header-left">
+                        <button class="back-button" onclick="navigateToHome()">←</button>
+                        <h1 class="abonnement-title">Abonnement</h1>
+                    </div>
+                    <div class="subscriber-number">
+                        n° abonné : <span id="subscriberNumber">M7262195</span>
+                    </div>
+                </div>
+
+                <!-- Ma Formule -->
+                <div class="section-card">
+                    <div class="section-card-header">
+                        <h3>Ma formule</h3>
+                        <div class="section-card-actions">
+                            <button class="action-btn" onclick="openFormuleModal('ma_formule')">GERER MA FORMULE</button>
+                            <a href="#" class="detail-link" onclick="trackAbonnementAction('Voir le détail', 'ma_formule')">Voir le détail →</a>
+                        </div>
+                    </div>
+                    
+                    <div class="formule-item">
+                        <div class="formule-row">
+                            <div>
+                                <div class="formule-name">CANAL<span>+</span></div>
+                                <div class="formule-details">Abonnement mensuel - Date de renouvellement: 16/01/2026</div>
+                            </div>
+                            <div class="formule-price">22€99/mois</div>
+                        </div>
+                    </div>
+                    
+                    <div class="formule-item">
+                        <div class="formule-row">
+                            <div>
+                                <div class="formule-name">CANAL<span>+</span> A LA DEMANDE ET APPLE TV<span>+</span></div>
+                                <div class="formule-details">Abonnement mensuel</div>
+                            </div>
+                            <div class="formule-price">2€/mois</div>
+                        </div>
+                    </div>
+                    
+                    <p class="formule-note">
+                        Les montants de vos offres actuelles sont indiqués hors prorata et/ou changements d'offre sur le mois en cours
+                    </p>
+                </div>
+
+                <!-- Mes Options -->
+                <div class="section-card">
+                    <div class="section-card-header">
+                        <h3>Mes options</h3>
+                        <div class="section-card-actions">
+                            <button class="action-btn" onclick="trackAbonnementAction('GERER MES OPTIONS', 'mes_options')">GERER MES OPTIONS</button>
+                            <a href="#" class="detail-link" onclick="trackAbonnementAction('Voir toutes les options', 'mes_options')">Voir toutes les options →</a>
+                        </div>
+                    </div>
+                    
+                    <div class="option-item">
+                        <div class="option-icon">🎁</div>
+                        <div class="option-info">
+                            <h4>PASS DIVERTISSEMENT</h4>
+                            <p>Offert</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mes Plateformes -->
+                <div class="section-card">
+                    <h3 style="margin-bottom: 16px;">Mes plateformes</h3>
+                    <p class="platforms-empty">Aucun partenaire</p>
+                </div>
+
+                <!-- Mes Demarches -->
+                <section class="demarches-section">
+                    <h2 class="demarches-title">Mes Demarches</h2>
+                    <p class="demarches-subtitle">Résiliez, réactivez ou transférez votre abonnement</p>
+                    
+                    <div class="resilier-card">
+                        <div class="resilier-text">
+                            <h4>Vous souhaitez résilier votre abonnement ?</h4>
+                            <p>Merci d'avoir partagé le plein d'émotions avec nous. Revenez quand vous voulez !</p>
+                        </div>
+                        <button class="resilier-btn" onclick="handleResilier()">RÉSILIER</button>
+                    </div>
+                    
+                    <a href="#" class="conditions-link" onclick="trackAbonnementAction('Conditions générales', 'mes_demarches')">Conditions générales d'abonnement</a>
+                </section>
+
+                <!-- Help Section (repeated for this page) -->
+                <section class="help-section">
+                    <h2 class="help-title">Besoin d'aide ?</h2>
+                    <div class="help-card">
+                        <div class="help-card-content">
+                            <div class="help-icon">💬</div>
+                            <div class="help-text">
+                                <h3>Assistance CANAL+</h3>
+                                <p>Échangez avec d'autres abonnés sur le forum, partagez vos idées, consultez nos FAQ, informez-vous des derniers incidents.</p>
+                            </div>
+                        </div>
+                        <button class="help-btn" onclick="trackCTA('VOIR L\'ASSISTANCE', 'help')">VOIR L'ASSISTANCE</button>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- PAGE: Résiliation - Choisissez un motif -->
+        <div class="page resilier-page" id="pageResilier">
+            <!-- Resilier Header -->
+            <header class="resilier-header">
+                <div class="resilier-logo">
+                    <span class="resilier-logo-text">CANAL<span>+</span></span>
+                    <span class="resilier-logo-subtitle">ESPACE CLIENT</span>
+                </div>
+                <div class="resilier-secure">
+                    <span>🔒</span>
+                    Connexion sécurisée
+                </div>
+            </header>
+
+            <!-- Resilier Content -->
+            <div class="resilier-content">
+                <h1 class="resilier-title">CHOISISSEZ UN MOTIF</h1>
+
+                <!-- Commitment Banner -->
+                <div class="commitment-banner">
+                    <div class="info-icon">i</div>
+                    <span>Pour rappel, vous êtes engagé avec nous <strong>jusqu'au 16/01/2026</strong></span>
+                </div>
+
+                <!-- Personal Information Card -->
+                <div class="personal-info-card">
+                    <div class="personal-info-header">
+                        <div>
+                            <h2 class="personal-info-title">Mes informations personnelles</h2>
+                            <p class="personal-info-subtitle">Vérifiez vos coordonnées de contact, elles seront importantes pour finaliser votre résiliation.</p>
+                        </div>
+                        <a href="#" class="modify-link" onclick="safeTrack('Modify Personal Info Clicked')">Modifier →</a>
+                    </div>
+                    <div class="personal-info-details">
+                        <span><strong>Monsieur DEMO USER</strong></span>
+                        <span>N° Abonné <strong>M7262195</strong></span>
+                        <span>N° contrat <strong>1</strong></span>
+                        <span>E-mail <strong>demo@canalplus.fr</strong></span>
+                    </div>
+                    <div class="personal-info-details" style="margin-top: 8px;">
+                        <span>Téléphone fixe <strong>0978469397</strong></span>
+                    </div>
+                </div>
+
+                <!-- Reasons Section -->
+                <section class="reasons-section">
+                    <h2 class="reasons-title">Vous souhaitez nous quitter parce que...</h2>
+                    
+                    <button class="reason-item" onclick="showRetentionModal('contenus')">
+                        <span>Je ne suis pas satisfait des contenus</span>
+                        <span class="reason-arrow">›</span>
+                    </button>
+                    <button class="reason-item" onclick="showRetentionModal('tarif')">
+                        <span>Le tarif de mon abonnement est trop élevé</span>
+                        <span class="reason-arrow">›</span>
+                    </button>
+                    <button class="reason-item" onclick="showRetentionModal('concurrent')">
+                        <span>Je résilie pour une offre concurrente (Netflix, beIN, SFR Sport, Molotov, TF1+, M6+...)</span>
+                        <span class="reason-arrow">›</span>
+                    </button>
+                    <button class="reason-item" onclick="showRetentionModal('technique')">
+                        <span>Je rencontre des problèmes techniques</span>
+                        <span class="reason-arrow">›</span>
+                    </button>
+                    <button class="reason-item" onclick="showRetentionModal('publicite')">
+                        <span>Je visionne trop de publicité au sein de mes contenus</span>
+                        <span class="reason-arrow">›</span>
+                    </button>
+                    <button class="reason-item" onclick="showRetentionModal('evoluer')">
+                        <span>Je souhaite faire évoluer mon offre</span>
+                        <span class="reason-arrow">›</span>
+                    </button>
+                    <button class="reason-item" onclick="showRetentionModal('box')">
+                        <span>Je souhaite regarder mes programmes directement sur la TV via ma box internet</span>
+                        <span class="reason-arrow">›</span>
+                    </button>
+                    <button class="reason-item" onclick="showRetentionModal('autre')">
+                        <span>Je ne souhaite pas me prononcer</span>
+                        <span class="reason-arrow">›</span>
+                    </button>
+                </section>
+
+                <!-- Callback Option -->
+                <div class="callback-option">
+                    <div class="info-icon" style="background: #999;">i</div>
+                    <span>Vous souhaitez en parler ? <a href="#" onclick="safeTrack('Callback Request Clicked')">Être appelé par un conseiller →</a></span>
+                </div>
+
+                <!-- Cancel Button -->
+                <button class="cancel-btn" onclick="navigateToAbonnement()">Annuler</button>
+            </div>
+        </div>
+
+        <!-- PAGE: Contact -->
+        <div class="page resilier-page" id="pageContact">
+            <!-- Resilier Header (reused) -->
+            <header class="resilier-header">
+                <div class="resilier-logo">
+                    <span class="resilier-logo-text">CANAL<span>+</span></span>
+                    <span class="resilier-logo-subtitle">ESPACE CLIENT</span>
+                </div>
+                <div class="resilier-secure">
+                    <span>🔒</span>
+                    Connexion sécurisée
+                </div>
+            </header>
+
+            <div class="contact-page-content">
+                <!-- Contact Header -->
+                <div class="contact-header">
+                    <div class="contact-header-left">
+                        <button class="back-btn" onclick="navigateToHome()">‹</button>
+                        <h1 class="contact-title">CONTACT</h1>
+                    </div>
+                    <div class="subscriber-number">
+                        n° abonné : <strong>M7262195</strong>
+                    </div>
+                </div>
+
+                <!-- Virtual Assistant Section -->
+                <h2 class="contact-section-title">Contactez votre Assistant virtuel CANAL+</h2>
+                <div class="assistant-card">
+                    <div class="assistant-card-left">
+                        <div class="assistant-icon">💬</div>
+                        <div class="assistant-info">
+                            <h3>Échangez avec Marc, votre Assistant virtuel</h3>
+                            <p>Disponible 24h/24, il est là pour vous accompagner dans vos démarches et vous faire gagner du temps.</p>
+                        </div>
+                    </div>
+                    <button class="btn-cta-red" onclick="trackContactAction('Poser votre question', 'virtual_assistant')">POSER VOTRE QUESTION</button>
+                </div>
+
+                <!-- Mes démarches en ligne -->
+                <h2 class="contact-section-title">Mes démarches en ligne</h2>
+                <p class="contact-section-subtitle">Précisez votre besoin</p>
+                <div class="demarche-list">
+                    <button class="demarche-item" onclick="handleDemarcheClick('gerer_abonnement')">
+                        <div class="demarche-icon document">📄</div>
+                        <div class="demarche-info">
+                            <h4>Gérer mon abonnement</h4>
+                            <p>Modifier ma formule, supprimer une option, problème de facturation...</p>
+                        </div>
+                        <span class="demarche-arrow">›</span>
+                    </button>
+                    <button class="demarche-item" onclick="handleDemarcheClick('problemes_techniques')">
+                        <div class="demarche-icon technical">📺</div>
+                        <div class="demarche-info">
+                            <h4>Résoudre mes problèmes techniques</h4>
+                            <p>Activer mon matériel reçu, écran noir, absence de son, message d'erreur...</p>
+                        </div>
+                        <span class="demarche-arrow">›</span>
+                    </button>
+                    <button class="demarche-item" onclick="handleDemarcheClick('resilier')">
+                        <div class="demarche-icon cancel">❌</div>
+                        <div class="demarche-info">
+                            <h4>Résilier mon abonnement</h4>
+                            <p>Résilier mon abonnement</p>
+                        </div>
+                        <span class="demarche-arrow">›</span>
+                    </button>
+                </div>
+
+                <!-- Mes communications avec CANAL+ -->
+                <h2 class="contact-section-title">Mes communications avec CANAL+</h2>
+                <div class="communications-card">
+                    <div class="communication-item">
+                        <span class="communication-tag">Souscription/info</span>
+                        <span class="communication-date">17/12/2025 20h03</span>
+                    </div>
+                    <p class="communication-text">Vous avez contacté CANAL+ <strong>via la Boutique CANAL+</strong></p>
+                </div>
+
+                <!-- Besoin d'aide -->
+                <h2 class="help-section-title">BESOIN D'AIDE ?</h2>
+                <div class="help-card">
+                    <div class="assistant-card-left">
+                        <div class="help-icon">❓</div>
+                        <div class="assistant-info">
+                            <h3>Assistance CANAL+</h3>
+                            <p>Échangez avec d'autres abonnés sur le forum, partagez vos idées, consultez nos FAQ, informez-vous des derniers incidents.</p>
+                        </div>
+                    </div>
+                    <button class="btn-cta-red" onclick="trackContactAction('Voir assistance', 'help_section')">VOIR L'ASSISTANCE</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: Paiement -->
+        <div class="page resilier-page" id="pagePaiement">
+            <!-- Resilier Header (reused) -->
+            <header class="resilier-header">
+                <div class="resilier-logo">
+                    <span class="resilier-logo-text">CANAL<span>+</span></span>
+                    <span class="resilier-logo-subtitle">ESPACE CLIENT</span>
+                </div>
+                <div class="resilier-secure">
+                    <span>🔒</span>
+                    Connexion sécurisée
+                </div>
+            </header>
+
+            <div class="paiement-page-content">
+                <!-- Paiement Header -->
+                <div class="paiement-header">
+                    <div class="paiement-header-left">
+                        <button class="back-btn" onclick="navigateToHome()">‹</button>
+                        <h1 class="paiement-title">PAIEMENT</h1>
+                    </div>
+                    <div class="subscriber-number">
+                        n° abonné : <strong>M7262195</strong>
+                    </div>
+                </div>
+
+                <!-- Mes informations de paiement -->
+                <div class="payment-info-card">
+                    <div class="payment-info-header">
+                        <div>
+                            <h2 class="payment-info-title">Mes informations de paiement</h2>
+                            <div class="payment-card-details">
+                                <p class="card-number">CB 416549XXXXXX2714</p>
+                                <p class="expiry">Expire fin 01/2027</p>
+                            </div>
+                        </div>
+                        <a href="#" class="action-link" onclick="trackPaiementAction('Gérer moyens de paiement')">Gérer mes moyens de paiement →</a>
+                    </div>
+                </div>
+
+                <!-- Prochain paiement -->
+                <h2 class="paiement-section-title">Prochain paiement</h2>
+                <div class="next-payment-card">
+                    <div class="next-payment-left">
+                        <div class="next-payment-icon">📄</div>
+                        <div class="next-payment-info">
+                            <h4>Janvier 2026</h4>
+                            <span class="amount">24€99</span>
+                        </div>
+                    </div>
+                    <a href="#" class="action-link" onclick="trackPaiementAction('Voir détail paiement')">Voir le détail →</a>
+                </div>
+                <p class="payment-note">Le montant affiché du prochain prélèvement ne tient pas compte de toute modification en cours de votre formule.</p>
+                <button class="btn-mensualites" onclick="trackPaiementAction('Afficher mensualités')">Afficher les prochaines mensualités</button>
+
+                <!-- Mes notes de facturation -->
+                <div class="facturation-card" onclick="trackPaiementAction('Accéder notes facturation')">
+                    <div class="facturation-left">
+                        <div class="facturation-icon">📋</div>
+                        <div class="facturation-info">
+                            <h4>Mes notes de facturation</h4>
+                            <p>Consultez et téléchargez l'ensemble de vos notes de facturation.</p>
+                        </div>
+                    </div>
+                    <a href="#" class="action-link">Accéder à mes notes de facturation →</a>
+                </div>
+
+                <!-- Une question sur vos paiements -->
+                <div class="facturation-card" onclick="trackPaiementAction('Nous contacter paiement')">
+                    <div class="facturation-left">
+                        <div class="facturation-icon">💬</div>
+                        <div class="facturation-info">
+                            <h4>Une question sur vos paiements ?</h4>
+                            <p>Vous pouvez discuter avec un conseiller CANAL+ pour en savoir plus sur votre abonnement.</p>
+                        </div>
+                    </div>
+                    <a href="#" class="action-link">Nous contacter →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: Confirmation Resilier -->
+        <div class="page resilier-page" id="pageConfirmResilier">
+            <!-- Resilier Header (reused) -->
+            <header class="resilier-header">
+                <div class="resilier-logo">
+                    <span class="resilier-logo-text">CANAL<span>+</span></span>
+                    <span class="resilier-logo-subtitle">ESPACE CLIENT</span>
+                </div>
+                <div class="resilier-secure">
+                    <span>🔒</span>
+                    Connexion sécurisée
+                </div>
+            </header>
+
+            <div class="confirm-resilier-content">
+                <h1 class="confirm-resilier-title">ETES-VOUS SÛR DE VOULOIR NOUS QUITTER ?</h1>
+
+                <!-- Formule Summary -->
+                <div class="formule-summary-card">
+                    <p class="formule-summary-label">Ma formule et mes options</p>
+                    <h3 class="formule-summary-name">CANAL<span>+</span> & CANAL<span>+</span> A LA DEMANDE ET APPLE TV<span>+</span></h3>
+                    <p class="formule-summary-option">PASS DIVERTISSEMENT</p>
+                </div>
+
+                <!-- End Date -->
+                <p class="end-date-text">Votre abonnement se terminera le 16/01/2026</p>
+
+                <!-- Action Buttons -->
+                <div class="confirm-actions">
+                    <button class="btn-rester" onclick="stayWithCanal()">Rester</button>
+                    <button class="btn-resilier-confirm" onclick="confirmResilier()">RESILIER</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: Gerer Mon Offre -->
+        <div class="page resilier-page" id="pageGererOffre">
+            <!-- Resilier Header (reused) -->
+            <header class="resilier-header">
+                <div class="resilier-logo">
+                    <span class="resilier-logo-text">CANAL<span>+</span></span>
+                    <span class="resilier-logo-subtitle">ESPACE CLIENT</span>
+                </div>
+                <div class="resilier-secure">
+                    <span>🔒</span>
+                    Connexion sécurisée
+                </div>
+            </header>
+
+            <div class="gerer-offre-content">
+                <h1 class="gerer-offre-title">GERER MON OFFRE</h1>
+                <p class="gerer-offre-subtitle">Votre offre actuelle dans les moindres détails, et rien ne vous empêche de la modifier.</p>
+
+                <!-- Subscription 1: CANAL+ -->
+                <div class="subscription-card">
+                    <div class="subscription-card-header">
+                        <div>
+                            <h3 class="subscription-name">CANAL<span>+</span></h3>
+                            <p class="subscription-type">Abonnement mensuel</p>
+                        </div>
+                        <div class="subscription-price">22€99<small>/mois</small></div>
+                    </div>
+                    <div class="subscription-footer">
+                        <a href="#" class="subscription-link" onclick="safeTrack('Subscription Details Clicked', {subscription: 'CANAL+'})">En savoir plus →</a>
+                    </div>
+                </div>
+
+                <!-- Subscription 2: CANAL+ A LA DEMANDE ET APPLE TV -->
+                <div class="subscription-card">
+                    <div class="subscription-card-header">
+                        <div>
+                            <h3 class="subscription-name">CANAL<span>+</span> A LA DEMANDE ET APPLE TV</h3>
+                            <p class="subscription-type">Abonnement mensuel</p>
+                        </div>
+                        <div class="subscription-price">2€<small>/mois</small></div>
+                    </div>
+                    <div class="subscription-footer">
+                        <a href="#" class="subscription-link" onclick="safeTrack('Subscription Details Clicked', {subscription: 'CANAL+ A LA DEMANDE'})">En savoir plus →</a>
+                        <button class="subscription-btn-remove" onclick="removeSubscription('CANAL+ A LA DEMANDE ET APPLE TV', 2)">Supprimer</button>
+                    </div>
+                </div>
+
+                <!-- Adult Programs Section -->
+                <div class="adult-programs-card">
+                    <h3 class="adult-programs-title">PROGRAMMES ADULTES</h3>
+                    <button class="adult-programs-btn" onclick="manageAdultPrograms()">GERER LES PROGRAMMES ADULTES</button>
+                </div>
+
+                <!-- Back Button -->
+                <button class="cancel-btn" onclick="navigateToAbonnement()" style="margin-top: 32px;">Retour à mon abonnement</button>
+            </div>
+        </div>
+
+        <!-- PAGE: Changer Mon Offre -->
+        <div class="page offres-page resilier-page" id="pageOffres">
+            <!-- Resilier Header (reused) -->
+            <header class="resilier-header">
+                <div class="resilier-logo">
+                    <span class="resilier-logo-text">CANAL<span>+</span></span>
+                    <span class="resilier-logo-subtitle">ESPACE CLIENT</span>
+                </div>
+                <div class="resilier-secure">
+                    <span>🔒</span>
+                    Connexion sécurisée
+                </div>
+            </header>
+
+            <div class="offres-content">
+                <h1 class="offres-title">CHANGER MON OFFRE</h1>
+                <p class="offres-subtitle">Remplacez votre offre d'abonnement actuelle par nos nouvelles offres pensées pour vous.</p>
+
+                <!-- Current Offer -->
+                <h2 class="offres-section-title">Votre offre actuelle</h2>
+                <div class="current-offer-card">
+                    <div class="current-offer-header">
+                        <div>
+                            <h3 class="current-offer-name">CANAL<span>+</span> & CANAL<span>+</span> A LA DEMANDE ET APPLE TV</h3>
+                            <p class="current-offer-type">Abonnement mensuel</p>
+                        </div>
+                        <div class="current-offer-price">24€99<small>/mois</small></div>
+                    </div>
+                    <a href="#" class="current-offer-link" onclick="safeTrack('Current Offer Details Clicked')">En savoir plus →</a>
+                </div>
+
+                <!-- Recommended Offers -->
+                <h2 class="offres-section-title">Nos offres recommandées</h2>
+                
+                <!-- Compare Card -->
+                <div class="compare-card">
+                    <div class="compare-card-left">
+                        <span class="compare-icon">📊</span>
+                        <span class="compare-text">Besoin d'aide pour choisir ? Vous pouvez comparer toutes les offres</span>
+                    </div>
+                    <a href="#" class="compare-link" onclick="safeTrack('Compare Offers Clicked')">Comparer →</a>
+                </div>
+
+                <!-- Offer: CANAL+ CINE SERIES -->
+                <div class="offer-card">
+                    <div class="offer-card-header">
+                        <div>
+                            <h3 class="offer-name">CANAL<span>+</span> CINE SERIES</h3>
+                        </div>
+                        <div class="offer-price-section">
+                            <div class="offer-price">34<small>€99/mois</small></div>
+                            <p class="offer-price-type">Abonnement mensuel</p>
+                        </div>
+                    </div>
+                    <div class="offer-channels">
+                        <span class="channel-badge canal">CANAL<span>+</span></span>
+                        <span class="channel-badge sport">CANAL+ SPORT</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> GRAND ECRAN</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> BOX OFFICE</span>
+                        <span class="channel-badge apple">tv</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> CINEMA(S)</span>
+                        <span class="channel-badge ocs">OCS</span>
+                        <span class="channel-badge cine">CINE+ family</span>
+                        <span class="channel-more">...</span>
+                    </div>
+                    <div class="offer-card-footer">
+                        <a href="#" class="offer-link" onclick="safeTrack('Offer Details Clicked', {offer: 'CINE SERIES'})">En savoir plus →</a>
+                        <button class="offer-cta-btn" onclick="selectOffer('CINE SERIES', 34.99)">CHOISIR L'OFFRE</button>
+                    </div>
+                </div>
+
+                <!-- Offer: CANAL+ SPORT -->
+                <div class="offer-card">
+                    <div class="offer-card-header">
+                        <div>
+                            <h3 class="offer-name">CANAL<span>+</span> SPORT</h3>
+                        </div>
+                        <div class="offer-price-section">
+                            <div class="offer-price">45<small>€99/mois</small></div>
+                            <p class="offer-price-type">Abonnement mensuel</p>
+                        </div>
+                    </div>
+                    <div class="offer-channels">
+                        <span class="channel-badge canal">CANAL<span>+</span></span>
+                        <span class="channel-badge sport">CANAL+ SPORT 360</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> GRAND ECRAN</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> BOX OFFICE</span>
+                        <span class="channel-badge apple">tv</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> DOCS</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> KIDS</span>
+                        <span class="channel-badge">INFOSPORT+</span>
+                        <span class="channel-more">...</span>
+                    </div>
+                    <div class="offer-card-footer">
+                        <a href="#" class="offer-link" onclick="safeTrack('Offer Details Clicked', {offer: 'SPORT'})">En savoir plus →</a>
+                        <button class="offer-cta-btn" onclick="selectOffer('SPORT', 45.99)">CHOISIR L'OFFRE</button>
+                    </div>
+                </div>
+
+                <!-- Offer: OPTION CANAL+ FOOT, SPORT, CINEMA -->
+                <div class="offer-card">
+                    <div class="offer-card-header">
+                        <div>
+                            <h3 class="offer-name">OPTION CANAL<span>+</span> FOOT, SPORT, CINEMA</h3>
+                        </div>
+                        <div class="offer-price-section">
+                            <div class="offer-price">10<small>€/mois</small></div>
+                            <p class="offer-price-type">Abonnement mensuel</p>
+                        </div>
+                    </div>
+                    <div class="offer-channels">
+                        <span class="channel-badge canal">CANAL<span>+</span> FOOT</span>
+                        <span class="channel-badge sport">CANAL+ SPORT</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> CINEMA(S)</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> LIVE 1</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> LIVE 2</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> LIVE 3</span>
+                    </div>
+                    <div class="offer-card-footer">
+                        <a href="#" class="offer-link" onclick="safeTrack('Offer Details Clicked', {offer: 'OPTION FOOT SPORT CINEMA'})">En savoir plus →</a>
+                        <button class="offer-cta-btn" onclick="selectOffer('OPTION FOOT SPORT CINEMA', 10)">CHOISIR L'OFFRE</button>
+                    </div>
+                </div>
+
+                <!-- Offer: PASS COUPES D'EUROPE -->
+                <div class="offer-card">
+                    <div class="offer-card-header">
+                        <div>
+                            <h3 class="offer-name">PASS COUPES D'EUROPE</h3>
+                        </div>
+                        <div class="offer-price-section">
+                            <div class="offer-price">10<small>€/mois</small></div>
+                            <p class="offer-price-type">Abonnement mensuel</p>
+                        </div>
+                    </div>
+                    <div class="offer-channels">
+                        <span class="channel-badge canal">CANAL<span>+</span> LIVE 1</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> LIVE 2</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> LIVE 3</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> LIVE 4</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> LIVE 5</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> LIVE 6</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> LIVE 7</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> LIVE 8</span>
+                        <span class="channel-more">...</span>
+                    </div>
+                    <div class="offer-card-footer">
+                        <a href="#" class="offer-link" onclick="safeTrack('Offer Details Clicked', {offer: 'PASS COUPES EUROPE'})">En savoir plus →</a>
+                        <button class="offer-cta-btn" onclick="selectOffer('PASS COUPES EUROPE', 10)">CHOISIR L'OFFRE</button>
+                    </div>
+                </div>
+
+                <!-- Offer: CANAL+ LA TOTALE -->
+                <div class="offer-card">
+                    <div class="offer-card-header">
+                        <div>
+                            <h3 class="offer-name">CANAL<span>+</span> LA TOTALE</h3>
+                        </div>
+                        <div class="offer-price-section">
+                            <div class="offer-price">75<small>€99/mois</small></div>
+                            <p class="offer-price-type">Abonnement mensuel</p>
+                        </div>
+                    </div>
+                    <div class="offer-channels">
+                        <span class="channel-badge canal">CANAL<span>+</span></span>
+                        <span class="channel-badge sport">CANAL+ SPORT 360</span>
+                        <span class="channel-badge canal">CANAL<span>+</span> CINEMA(S)</span>
+                        <span class="channel-badge apple">tv</span>
+                        <span class="channel-badge ocs">OCS</span>
+                        <span class="channel-badge cine">CINE+</span>
+                        <span class="channel-badge">beIN SPORTS</span>
+                        <span class="channel-badge">Eurosport</span>
+                        <span class="channel-more">...</span>
+                    </div>
+                    <div class="offer-card-footer">
+                        <a href="#" class="offer-link" onclick="safeTrack('Offer Details Clicked', {offer: 'LA TOTALE'})">En savoir plus →</a>
+                        <button class="offer-cta-btn" onclick="selectOffer('LA TOTALE', 75.99)">CHOISIR L'OFFRE</button>
+                    </div>
+                </div>
+
+                <!-- Back Button -->
+                <button class="cancel-btn" onclick="navigateToAbonnement()" style="margin-top: 24px;">Retour à mon abonnement</button>
+            </div>
+        </div>
+
+        <!-- Gerer Ma Formule Modal -->
+        <div class="formule-modal-overlay" id="formuleModal">
+            <div class="formule-modal">
+                <button class="formule-modal-close" onclick="closeFormuleModal()">×</button>
+                <h2 class="formule-modal-title">GERER MA FORMULE</h2>
+                
+                <div class="formule-option">
+                    <div class="formule-option-left">
+                        <div class="formule-option-icon">🔍</div>
+                        <p class="formule-option-text">Choisissez une nouvelle offre adaptée à vos envies</p>
+                    </div>
+                    <button class="formule-btn-red" onclick="discoverOffers('formule_modal')">DECOUVRIR LES OFFRES</button>
+                </div>
+
+                <div class="formule-option">
+                    <div class="formule-option-left">
+                        <div class="formule-option-icon">⚙️</div>
+                        <p class="formule-option-text">Ajustez votre formule actuelle</p>
+                    </div>
+                    <button class="formule-btn-dark" onclick="modifyFormule()">MODIFIER MA FORMULE</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Retention Modal -->
+        <div class="retention-modal-overlay" id="retentionModal">
+            <div class="retention-modal">
+                <button class="retention-modal-close" onclick="closeRetentionModal()">×</button>
+                <h2 class="retention-modal-title">RESTEZ AVEC NOUS, ON A QUELQUE CHOSE POUR VOUS !</h2>
+                <p class="retention-modal-subtitle">Votre abonnement ne vous convient plus ? <strong>On a la solution !</strong></p>
+                
+                <div class="retention-info-box">
+                    <div class="retention-info-icon">i</div>
+                    <div class="retention-info-content">
+                        <strong>Votre abonnement peut évoluer selon vos envies :</strong>
+                        Un catalogue de contenus enrichi, les meilleurs services de streaming réunis dans nos offres, toute l'actualité des plus grandes compétitions sportives.<br>
+                        Tout ceci, toujours au meilleur prix !
+                    </div>
+                </div>
+
+                <button class="retention-cta-btn" onclick="trackRetentionOffer()">DECOUVRIR NOS OFFRES</button>
+                <p style="text-align: center; margin-top: 20px;">
+                    <a href="#" onclick="proceedToConfirmation(); return false;" style="color: #666; text-decoration: underline; font-size: 14px;">Non merci, je souhaite continuer ma résiliation</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Chat Button -->
+        <button class="chat-button" onclick="trackCTA('Chat', 'floating_button')">💬</button>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-grid">
+                    <div class="footer-column">
+                        <h4>Pages du site</h4>
+                        <ul>
+                            <li><a href="#" onclick="trackFooterLink('Compte')">Compte</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Abonnement')">Abonnement</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Paiement')">Paiement</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Matériel')">Matériel</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Contact')">Contact</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Plan de site')">Plan de site</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Informations légales</h4>
+                        <ul>
+                            <li><a href="#" onclick="trackFooterLink('Mentions légales')">Mentions légales</a></li>
+                            <li><a href="#" onclick="trackFooterLink('CGU')">CGU</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Données personnelles')">Données personnelles et confidentialité</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Cookies')">Cookies</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Accessibilité')">Accessibilité</a></li>
+                            <li><a href="#" onclick="trackFooterLink('IA - droit d\'opposition')">IA - droit d'opposition</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Services Particuliers</h4>
+                        <ul>
+                            <li><a href="#" onclick="trackFooterLink('Boutique')">Boutique</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Assistance')">Assistance</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Distributeurs')">Distributeurs</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Relais Pickup')">Relais Pickup</a></li>
+                            <li><a href="#" onclick="trackFooterLink('CGA')">CGA</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Fiche tarifaire')">Fiche tarifaire</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Rétractation')">Rétractation</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Résiliation')">Résiliation</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Parrainage')">Parrainage</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Services Professionnels</h4>
+                        <ul>
+                            <li><a href="#" onclick="trackFooterLink('Offres Pro')">Offres Pro</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Distributeurs Pro')">Distributeurs</a></li>
+                            <li><a href="#" onclick="trackFooterLink('Relais Pickup Pro')">Relais Pickup</a></li>
+                            <li><a href="#" onclick="trackFooterLink('CGA Lieux Publics')">CGA Lieux Publics</a></li>
+                            <li><a href="#" onclick="trackFooterLink('CGA Collectivités')">CGA Collectivités</a></li>
+                        </ul>
+                        <div class="footer-social" style="margin-top: 24px;">
+                            <a href="#" class="social-icon" onclick="trackSocialClick('Facebook')">f</a>
+                            <a href="#" class="social-icon" onclick="trackSocialClick('X')">𝕏</a>
+                            <a href="#" class="social-icon" onclick="trackSocialClick('Dailymotion')">d</a>
+                            <a href="#" class="social-icon" onclick="trackSocialClick('YouTube')">▶</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="footer-logo">CANAL<span>+</span></div>
+                    <div class="footer-copyright">© CANAL+ 2025</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 
+        AMPLITUDE SDK - MANUAL LOADING FOR GDPR COMPLIANCE
+        
+        CRITICAL: We use manual SDK loading (cdn.amplitude.com/libs/) instead of 
+        script loader (cdn.amplitude.com/script/API_KEY.js) because:
+        - Script loader AUTO-INITIALIZES immediately on page load = GDPR violation
+        - Manual loading keeps SDK DORMANT until we explicitly call amplitude.init()
+        - This ensures NO tracking occurs before user accepts cookies
+    -->
+    <script>
+        // Configuration constants
+        const AMPLITUDE_API_KEY = 'b16fbcf70484402413f712160befa8cf';
+        
+        // User state
+        let currentUser = null;
+        let isAmplitudeInitialized = false;
+        let sdkLoaded = false;
+
+        // Load SDK scripts dynamically (only after consent)
+        function loadAmplitudeSDK() {
+            return new Promise((resolve, reject) => {
+                // Load Analytics Browser SDK 2.32.0
+                const analyticsScript = document.createElement('script');
+                analyticsScript.src = 'https://cdn.amplitude.com/libs/analytics-browser-2.32.0-min.js.gz';
+                analyticsScript.onload = () => {
+                    console.log('✅ Amplitude Analytics SDK loaded');
+                    
+                    // Load Session Replay Plugin
+                    const sessionReplayScript = document.createElement('script');
+                    sessionReplayScript.src = 'https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.13.10-min.js.gz';
+                    sessionReplayScript.onload = () => {
+                        console.log('✅ Session Replay Plugin loaded');
+                        sdkLoaded = true;
+                        resolve();
+                    };
+                    sessionReplayScript.onerror = reject;
+                    document.body.appendChild(sessionReplayScript);
+                };
+                analyticsScript.onerror = reject;
+                document.body.appendChild(analyticsScript);
+            });
+        }
+
+        // Initialize Amplitude with Session Replay and Frustration Analytics
+        // ONLY called AFTER cookie consent is accepted
+        async function initializeAmplitude() {
+            if (isAmplitudeInitialized) return;
+            
+            try {
+                // First, load the SDK scripts
+                if (!sdkLoaded) {
+                    await loadAmplitudeSDK();
+                }
+                
+                // Add Session Replay plugin with 100% sample rate for demo
+                window.amplitude.add(window.sessionReplay.plugin({
+                    sampleRate: 1
+                }));
+                
+                // Initialize Amplitude with autocapture and frustration analytics
+                window.amplitude.init(AMPLITUDE_API_KEY, {
+                    fetchRemoteConfig: true,
+                    autocapture: {
+                        attribution: true,
+                        sessions: true,
+                        pageViews: true,
+                        formInteractions: false,
+                        fileDownloads: false,
+                        elementInteractions: false,
+                        frustrationInteractions: true
+                    }
+                });
+                
+                isAmplitudeInitialized = true;
+                console.log('✅ Amplitude initialized with Session Replay and Frustration Analytics');
+            } catch (error) {
+                console.error('❌ Failed to initialize Amplitude:', error);
+            }
+        }
+
+        // Check cookie consent on page load
+        async function checkCookieConsent() {
+            const consent = localStorage.getItem('canalplus_cookie_consent');
+            if (consent === 'accepted') {
+                // User previously accepted - load and initialize Amplitude
+                document.getElementById('cookieModal').classList.remove('active');
+                document.getElementById('mainContent').classList.remove('blur-content');
+                await initializeAmplitude();
+            } else if (consent === 'rejected') {
+                // User previously rejected - no tracking
+                document.getElementById('cookieModal').classList.remove('active');
+                document.getElementById('mainContent').classList.remove('blur-content');
+                console.log('ℹ️ User rejected cookies - Amplitude not initialized');
+            } else {
+                // No consent yet - show modal, NO SDK loaded
+                document.getElementById('cookieModal').classList.add('active');
+                document.getElementById('mainContent').classList.add('blur-content');
+                console.log('ℹ️ Awaiting cookie consent - Amplitude SDK NOT loaded');
+            }
+        }
+
+        // Cookie consent handlers
+        async function handleAcceptCookies() {
+            localStorage.setItem('canalplus_cookie_consent', 'accepted');
+            document.getElementById('cookieModal').classList.remove('active');
+            document.getElementById('mainContent').classList.remove('blur-content');
+            
+            // NOW load and initialize Amplitude (only after consent)
+            await initializeAmplitude();
+        }
+
+        function handleRejectCookies() {
+            localStorage.setItem('canalplus_cookie_consent', 'rejected');
+            document.getElementById('cookieModal').classList.remove('active');
+            document.getElementById('mainContent').classList.remove('blur-content');
+        }
+
+        function handleLearnMore() {
+            alert('Politique de confidentialité CANAL+ - Cette fonctionnalité serait liée à la page de politique de confidentialité complète.');
+        }
+
+        // Safe tracking function
+        function safeTrack(eventName, eventProperties = {}) {
+            if (isAmplitudeInitialized && window.amplitude) {
+                window.amplitude.track(eventName, eventProperties);
+            }
+        }
+
+        // Event tracking functions
+        function trackNavigation(navItem) {
+            safeTrack('Navigation Item Clicked', {
+                nav_item: navItem,
+                location: 'header'
+            });
+        }
+
+        function trackCTA(ctaText, location) {
+            safeTrack('CTA Clicked', {
+                cta_text: ctaText,
+                location: location
+            });
+        }
+
+        function trackFeature(featureType) {
+            safeTrack('Feature Card Clicked', {
+                feature_type: featureType,
+                section: 'espace_client_features'
+            });
+        }
+
+        function trackDropdownItem(itemName) {
+            safeTrack('Dropdown Item Clicked', {
+                item_name: itemName,
+                dropdown: 'profile'
+            });
+        }
+
+        function trackProfileMenu(menuItem) {
+            safeTrack('Profile Menu Item Clicked', {
+                menu_item: menuItem
+            });
+        }
+
+        function trackFooterLink(linkName) {
+            safeTrack('Footer Link Clicked', {
+                link_name: linkName
+            });
+        }
+
+        function trackSocialClick(platform) {
+            safeTrack('Social Link Clicked', {
+                platform: platform
+            });
+        }
+
+        // Profile dropdown toggle
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('active');
+            
+            if (dropdown.classList.contains('active')) {
+                safeTrack('Profile Dropdown Opened');
+            }
+        }
+
+        function toggleLoggedInDropdown() {
+            const dropdown = document.getElementById('loggedInDropdown');
+            dropdown.classList.toggle('active');
+            
+            if (dropdown.classList.contains('active')) {
+                safeTrack('Profile Dropdown Opened', {
+                    state: 'logged_in'
+                });
+            }
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            const profileContainer = document.querySelector('.profile-container:not(.profile-logged-in)');
+            const loggedInContainer = document.getElementById('profileLoggedIn');
+            
+            if (profileContainer && !profileContainer.contains(e.target)) {
+                document.getElementById('profileDropdown').classList.remove('active');
+            }
+            
+            if (loggedInContainer && !loggedInContainer.contains(e.target)) {
+                document.getElementById('loggedInDropdown').classList.remove('active');
+            }
+        });
+
+        // Login modal functions
+        let loginRedirectTo = null;
+        
+        function openLoginModal(source) {
+            document.getElementById('loginModal').classList.add('active');
+            document.getElementById('profileDropdown').classList.remove('active');
+            
+            // Store redirect destination
+            if (source === 'abonnement_redirect') {
+                loginRedirectTo = 'abonnement';
+            } else {
+                loginRedirectTo = null;
+            }
+            
+            safeTrack('Login Modal Opened', {
+                source: source
+            });
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+            // Reset to step 1
+            document.getElementById('loginStep1').classList.add('active');
+            document.getElementById('loginStep2').classList.remove('active');
+            document.getElementById('emailInput').value = '';
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('continueBtn').disabled = true;
+        }
+
+        // Email validation
+        document.getElementById('emailInput').addEventListener('input', function() {
+            const email = this.value;
+            const isValid = email.includes('@') && email.includes('.');
+            document.getElementById('continueBtn').disabled = !isValid;
+        });
+
+        function goToPasswordStep() {
+            const email = document.getElementById('emailInput').value;
+            document.getElementById('welcomeEmail').textContent = email;
+            document.getElementById('loginStep1').classList.remove('active');
+            document.getElementById('loginStep2').classList.add('active');
+            
+            safeTrack('Login Email Entered', {
+                email_domain: email.split('@')[1] || 'unknown'
+            });
+        }
+
+        function goBackToEmail() {
+            document.getElementById('loginStep2').classList.remove('active');
+            document.getElementById('loginStep1').classList.add('active');
+        }
+
+        function togglePassword() {
+            const input = document.getElementById('passwordInput');
+            const toggle = document.querySelector('.password-toggle');
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggle.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                toggle.textContent = '👁️';
+            }
+            
+            safeTrack('Password Visibility Toggled');
+        }
+
+        function handleForgotPassword() {
+            safeTrack('Forgot Password Clicked');
+            alert('Un e-mail de réinitialisation vous sera envoyé.');
+        }
+
+        // Hash email for privacy-compliant User ID
+        async function hashEmail(email) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(email.toLowerCase().trim());
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex.substring(0, 16);
+        }
+
+        // Extract name from email
+        function extractNameFromEmail(email) {
+            const localPart = email.split('@')[0];
+            const parts = localPart.split(/[._-]/);
+            return parts.map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()).join(' ');
+        }
+
+        // Get initials
+        function getInitials(name) {
+            return name.split(' ').map(n => n.charAt(0).toUpperCase()).join('').substring(0, 2);
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            
+            if (!password) {
+                alert('Veuillez entrer votre mot de passe');
+                return;
+            }
+            
+            // Generate user data
+            const hashedUserId = await hashEmail(email);
+            const fullName = extractNameFromEmail(email);
+            const initials = getInitials(fullName);
+            
+            currentUser = {
+                userId: hashedUserId,
+                email: email,
+                name: fullName,
+                initials: initials
+            };
+            
+            // Set Amplitude user
+            if (isAmplitudeInitialized && window.amplitude) {
+                window.amplitude.setUserId(hashedUserId);
+                window.amplitude.identify(new window.amplitude.Identify()
+                    .set('email', email)
+                    .set('name', fullName)
+                    .set('user_type', 'subscriber')
+                );
+            }
+            
+            safeTrack('Login Completed', {
+                method: 'email'
+            });
+            
+            // Update UI
+            document.getElementById('userAvatar').textContent = initials;
+            document.getElementById('userName').textContent = fullName;
+            document.getElementById('userEmailDisplay').textContent = email;
+            document.getElementById('profileLoggedOut').style.display = 'none';
+            document.getElementById('profileLoggedIn').classList.add('active');
+            
+            // Hide login section on home page (user is now logged in)
+            document.getElementById('loginSection').style.display = 'none';
+            
+            closeLoginModal();
+            
+            // Redirect if user was trying to access a protected page
+            if (loginRedirectTo === 'abonnement') {
+                loginRedirectTo = null;
+                navigateToAbonnement();
+            }
+        }
+
+        function handleLogout() {
+            safeTrack('Logout Completed');
+            
+            // Clear user in Amplitude (preserve Device ID)
+            if (isAmplitudeInitialized && window.amplitude) {
+                window.amplitude.setUserId(undefined);
+            }
+            
+            currentUser = null;
+            
+            // Update UI
+            document.getElementById('profileLoggedOut').style.display = 'block';
+            document.getElementById('profileLoggedIn').classList.remove('active');
+            document.getElementById('loggedInDropdown').classList.remove('active');
+            
+            // Return to home page and show login section
+            document.getElementById('loginSection').style.display = 'grid';
+            navigateToHome();
+        }
+
+        // =====================
+        // PAGE NAVIGATION
+        // =====================
+        
+        let currentPage = 'home';
+
+        function navigateToPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show target page
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function navigateToHome() {
+            currentPage = 'home';
+            navigateToPage('pageHome');
+            
+            safeTrack('Page Viewed', {
+                page_name: 'Espace Client',
+                page_path: '/espace-client'
+            });
+        }
+
+        function navigateToAbonnement() {
+            // Check if user is logged in
+            if (!currentUser) {
+                openLoginModal('abonnement_redirect');
+                return;
+            }
+            
+            currentPage = 'abonnement';
+            navigateToPage('pageAbonnement');
+            
+            safeTrack('Page Viewed', {
+                page_name: 'Abonnement',
+                page_path: '/espace-client/abonnement'
+            });
+            
+            safeTrack('Feature Card Clicked', {
+                feature_type: 'abonnement',
+                section: 'espace_client_features'
+            });
+        }
+
+        // =====================
+        // ABONNEMENT PAGE TRACKING
+        // =====================
+
+        function trackAbonnementAction(actionName, section) {
+            safeTrack('Abonnement Action Clicked', {
+                action_name: actionName,
+                section: section
+            });
+        }
+
+        function handleResilier() {
+            // Track the critical cancellation intent
+            safeTrack('Resilier Button Clicked', {
+                page: 'abonnement',
+                section: 'mes_demarches',
+                user_subscription: 'CANAL+ mensuel',
+                monthly_value: 24.99
+            });
+            
+            // Navigate to the resilier page
+            navigateToResilier();
+        }
+
+        // =====================
+        // RESILIER PAGE FUNCTIONS
+        // =====================
+
+        function navigateToResilier() {
+            currentPage = 'resilier';
+            navigateToPage('pageResilier');
+            
+            safeTrack('Page Viewed', {
+                page_name: 'Choisissez un motif',
+                page_path: '/espace-client/resilier/motif'
+            });
+        }
+
+        let selectedCancellationReason = null;
+
+        function showRetentionModal(reason) {
+            // Track the cancellation reason selection
+            selectedCancellationReason = reason;
+            
+            safeTrack('Cancellation Reason Selected', {
+                reason: reason,
+                page: 'resilier'
+            });
+            
+            // Show the retention modal first
+            document.getElementById('retentionModal').classList.add('active');
+            
+            safeTrack('Retention Modal Shown', {
+                trigger_reason: reason
+            });
+        }
+
+        function closeRetentionModal() {
+            document.getElementById('retentionModal').classList.remove('active');
+            
+            safeTrack('Retention Modal Closed', {
+                action: 'dismissed'
+            });
+        }
+
+        function proceedToConfirmation() {
+            // Close retention modal and go to confirmation page
+            closeRetentionModal();
+            navigateToConfirmResilier();
+        }
+
+        function trackRetentionOffer() {
+            safeTrack('Retention Offer Clicked', {
+                cta_text: 'DECOUVRIR NOS OFFRES',
+                page: 'resilier'
+            });
+            
+            // Close retention modal and open formule modal (connected flow)
+            closeRetentionModal();
+            openFormuleModal('retention_offer');
+        }
+
+        // =====================
+        // CONFIRMATION RESILIER PAGE
+        // =====================
+
+        function navigateToConfirmResilier() {
+            currentPage = 'confirm-resilier';
+            navigateToPage('pageConfirmResilier');
+            
+            safeTrack('Page Viewed', {
+                page_name: 'Confirmation Resilier',
+                page_path: '/espace-client/resilier/confirmation',
+                cancellation_reason: selectedCancellationReason
+            });
+        }
+
+        function stayWithCanal() {
+            safeTrack('Stay With Canal Clicked', {
+                cancellation_reason: selectedCancellationReason,
+                stage: 'final_confirmation'
+            });
+            
+            // Navigate back to abonnement
+            navigateToAbonnement();
+            
+            // Show thank you message
+            alert("Merci de rester avec nous ! 🎉\n\nNous sommes heureux de vous compter parmi nos abonnés.");
+        }
+
+        function confirmResilier() {
+            safeTrack('Resilier Confirmed', {
+                cancellation_reason: selectedCancellationReason,
+                stage: 'final_confirmation',
+                subscription_end_date: '16/01/2026'
+            });
+            
+            const confirmed = confirm(
+                "⚠️ ATTENTION - DERNIÈRE CONFIRMATION\n\n" +
+                "Vous êtes sur le point de résilier votre abonnement CANAL+.\n\n" +
+                "Votre accès sera maintenu jusqu'au 16/01/2026.\n\n" +
+                "Cette action est définitive. Voulez-vous continuer ?"
+            );
+            
+            if (confirmed) {
+                safeTrack('Resilier Final Confirmed', {
+                    cancellation_reason: selectedCancellationReason
+                });
+                
+                alert("Votre demande de résiliation a été enregistrée.\n\n" +
+                      "Vous recevrez un e-mail de confirmation.\n\n" +
+                      "Votre accès reste actif jusqu'au 16/01/2026.");
+                
+                // Navigate back to home
+                navigateToHome();
+            } else {
+                safeTrack('Resilier Final Cancelled', {
+                    cancellation_reason: selectedCancellationReason
+                });
+            }
+        }
+
+        // =====================
+        // GERER MA FORMULE MODAL
+        // =====================
+
+        function openFormuleModal(source = 'abonnement') {
+            document.getElementById('formuleModal').classList.add('active');
+            
+            safeTrack('Formule Modal Opened', {
+                source: source
+            });
+        }
+
+        function closeFormuleModal() {
+            document.getElementById('formuleModal').classList.remove('active');
+            
+            safeTrack('Formule Modal Closed', {
+                action: 'dismissed'
+            });
+        }
+
+        function discoverOffers(source) {
+            safeTrack('Discover Offers Clicked', {
+                cta_text: 'DECOUVRIR LES OFFRES',
+                source: source
+            });
+            
+            closeFormuleModal();
+            
+            // Navigate to the offers page
+            navigateToOffres();
+        }
+
+        // =====================
+        // CHANGER MON OFFRE PAGE
+        // =====================
+
+        function navigateToOffres() {
+            currentPage = 'offres';
+            navigateToPage('pageOffres');
+            
+            safeTrack('Page Viewed', {
+                page_name: 'Changer Mon Offre',
+                page_path: '/espace-client/offres'
+            });
+        }
+
+        function selectOffer(offerName, price) {
+            safeTrack('Offer Selected', {
+                offer_name: offerName,
+                price: price,
+                currency: 'EUR'
+            });
+            
+            // Show confirmation
+            const confirmed = confirm(
+                `Vous avez sélectionné l'offre: ${offerName}\n\n` +
+                `Prix: ${price}€/mois\n\n` +
+                `Cliquez sur OK pour confirmer votre choix.`
+            );
+            
+            if (confirmed) {
+                safeTrack('Offer Confirmed', {
+                    offer_name: offerName,
+                    price: price
+                });
+                
+                alert(`Félicitations ! Votre abonnement ${offerName} sera actif sous 24h.\n\nVous recevrez un e-mail de confirmation.`);
+                
+                // Navigate back to abonnement
+                navigateToAbonnement();
+            } else {
+                safeTrack('Offer Cancelled', {
+                    offer_name: offerName
+                });
+            }
+        }
+
+        function modifyFormule() {
+            safeTrack('Modify Formule Clicked', {
+                cta_text: 'MODIFIER MA FORMULE'
+            });
+            
+            closeFormuleModal();
+            
+            // Navigate to the Gerer Mon Offre page
+            navigateToGererOffre();
+        }
+
+        // =====================
+        // GERER MON OFFRE PAGE
+        // =====================
+
+        function navigateToGererOffre() {
+            currentPage = 'gerer-offre';
+            navigateToPage('pageGererOffre');
+            
+            safeTrack('Page Viewed', {
+                page_name: 'Gerer Mon Offre',
+                page_path: '/espace-client/gerer-offre'
+            });
+        }
+
+        function removeSubscription(subscriptionName, price) {
+            safeTrack('Remove Subscription Clicked', {
+                subscription_name: subscriptionName,
+                price: price
+            });
+            
+            const confirmed = confirm(
+                `Voulez-vous vraiment supprimer "${subscriptionName}" ?\n\n` +
+                `Prix actuel: ${price}€/mois\n\n` +
+                `Cette action sera effective à la fin de votre période de facturation en cours.`
+            );
+            
+            if (confirmed) {
+                safeTrack('Subscription Removed', {
+                    subscription_name: subscriptionName,
+                    price: price
+                });
+                
+                alert(`L'option "${subscriptionName}" sera supprimée à la fin de votre période de facturation.\n\nVous recevrez un e-mail de confirmation.`);
+            } else {
+                safeTrack('Remove Subscription Cancelled', {
+                    subscription_name: subscriptionName
+                });
+            }
+        }
+
+        function manageAdultPrograms() {
+            safeTrack('Manage Adult Programs Clicked');
+            
+            alert("Vous allez être redirigé vers les paramètres des programmes adultes.\n\nCette fonctionnalité nécessite une vérification d'âge.");
+        }
+
+        // =====================
+        // CONTACT PAGE
+        // =====================
+
+        function navigateToContact() {
+            currentPage = 'contact';
+            navigateToPage('pageContact');
+            
+            safeTrack('Page Viewed', {
+                page_name: 'Contact',
+                page_path: '/espace-client/contact'
+            });
+        }
+
+        function trackContactAction(actionName, section) {
+            safeTrack('Contact Action Clicked', {
+                action_name: actionName,
+                section: section,
+                page: 'contact'
+            });
+        }
+
+        function handleDemarcheClick(demarche) {
+            safeTrack('Demarche Clicked', {
+                demarche_type: demarche,
+                page: 'contact'
+            });
+            
+            if (demarche === 'gerer_abonnement') {
+                navigateToAbonnement();
+            } else if (demarche === 'resilier') {
+                navigateToResilier();
+            } else if (demarche === 'problemes_techniques') {
+                alert("Vous allez être redirigé vers l'assistance technique.\n\nUn conseiller virtuel va vous aider à résoudre votre problème.");
+            }
+        }
+
+        // =====================
+        // PAIEMENT PAGE
+        // =====================
+
+        function navigateToPaiement() {
+            currentPage = 'paiement';
+            navigateToPage('pagePaiement');
+            
+            safeTrack('Page Viewed', {
+                page_name: 'Paiement',
+                page_path: '/espace-client/paiement'
+            });
+        }
+
+        function trackPaiementAction(actionName) {
+            safeTrack('Paiement Action Clicked', {
+                action_name: actionName,
+                page: 'paiement'
+            });
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', checkCookieConsent);
+    </script>
+</body>
+</html>
+
