@@ -3719,6 +3719,12 @@
         - Script loader AUTO-INITIALIZES immediately on page load = GDPR violation
         - Manual loading keeps SDK DORMANT until we explicitly call amplitude.init()
         - This ensures NO tracking occurs before user accepts cookies
+        
+        INSTALLED FEATURES:
+        - Analytics Browser SDK 2.32.0
+        - Session Replay Plugin 1.13.10 (100% sample rate for demo)
+        - Guides & Surveys SDK (loaded via script loader for plugin compatibility)
+        - Frustration Analytics (rage clicks, dead clicks)
     -->
     <script>
         // Configuration constants
@@ -3740,11 +3746,25 @@
                     
                     // Load Session Replay Plugin
                     const sessionReplayScript = document.createElement('script');
-                    sessionReplayScript.src = 'https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.13.2-min.js.gz';
+                    sessionReplayScript.src = 'https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.13.10-min.js.gz';
                     sessionReplayScript.onload = () => {
                         console.log('✅ Session Replay Plugin loaded');
-                        sdkLoaded = true;
-                        resolve();
+                        
+                        // Load Guides & Surveys SDK
+                        const engagementScript = document.createElement('script');
+                        engagementScript.src = `https://cdn.amplitude.com/script/${AMPLITUDE_API_KEY}.engagement.js`;
+                        engagementScript.onload = () => {
+                            console.log('✅ Guides & Surveys SDK loaded');
+                            sdkLoaded = true;
+                            resolve();
+                        };
+                        engagementScript.onerror = (error) => {
+                            console.warn('⚠️ Guides & Surveys SDK failed to load (optional feature):', error);
+                            // Still resolve - G&S is optional, don't block analytics
+                            sdkLoaded = true;
+                            resolve();
+                        };
+                        document.body.appendChild(engagementScript);
                     };
                     sessionReplayScript.onerror = reject;
                     document.body.appendChild(sessionReplayScript);
@@ -3770,6 +3790,12 @@
                     sampleRate: 1
                 }));
                 
+                // Add Guides & Surveys plugin (if loaded successfully)
+                if (window.engagement && window.engagement.plugin) {
+                    window.amplitude.add(window.engagement.plugin());
+                    console.log('✅ Guides & Surveys plugin added');
+                }
+                
                 // Initialize Amplitude with autocapture and frustration analytics
                 window.amplitude.init(AMPLITUDE_API_KEY, {
                     fetchRemoteConfig: true,
@@ -3785,7 +3811,7 @@
                 });
                 
                 isAmplitudeInitialized = true;
-                console.log('✅ Amplitude initialized with Session Replay and Frustration Analytics');
+                console.log('✅ Amplitude initialized with Session Replay, Frustration Analytics, and Guides & Surveys');
             } catch (error) {
                 console.error('❌ Failed to initialize Amplitude:', error);
             }
@@ -4480,4 +4506,3 @@
     </script>
 </body>
 </html>
-
