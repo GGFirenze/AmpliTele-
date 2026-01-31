@@ -2,7 +2,6 @@
 
 ## Amplitude Implementation Guide for Streaming Services
 
-**Version:** 1.0  
 **Last Updated:** January 2026  
 **Author:** Giuliano Giannini, Amplitude
 
@@ -444,10 +443,11 @@ amplitude.track('Login Completed');
    - Step 3: `Login Completed` (or `QR Login Completed` from server)
    - Step 4: `TV Activated`
 
-3. **Configure Grouping:**
-   - Click "Group by"
+3. **Hold property constant:**
+   - Click "Advanced"
+   - Select "Holding property constant"
    - Select `qr_login_flow_id`
-   - This groups events by the shared flow ID instead of Device ID
+   - This ensures that all conversions in the funnel are based on the qr login flow id instead of User ID/Device ID
 
 4. **Set Conversion Window:**
    - Recommended: 15-30 minutes (typical QR login flow duration)
@@ -538,16 +538,7 @@ amplitude.track('QR Login Failed', {
 **A:** 
 1. Check that `qr_login_flow_id` is present in all events (User Lookup → find a test user → verify properties)
 2. Ensure the flow_id values match exactly across devices (case-sensitive)
-3. Verify the funnel is grouped by `qr_login_flow_id`, not User or Device
+3. Verify the funnel holds `qr_login_flow_id` constant
 4. Check conversion window is long enough for your flow
 
 ---
-
-## Support
-
-For implementation questions or assistance, contact your Amplitude Solutions Engineer.
-
----
-
-*This guide is designed for streaming services implementing QR code login flows but the patterns apply to any cross-device authentication scenario.*
-
