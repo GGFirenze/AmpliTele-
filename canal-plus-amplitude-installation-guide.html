@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide d'Installation Amplitude | Canal+ avec Tealium</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📺</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --canal-black: #0a0a0a;
+            --canal-dark: #141414;
+            --canal-gray: #1a1a1a;
+            --canal-red: #e60000;
+            --canal-red-dark: #cc0000;
+            --amplitude-blue: #1a73e8;
+            --tealium-teal: #00a0af;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --border-color: #2a2a2a;
+            --code-bg: #0d1117;
+            --success-green: #22c55e;
+            --warning-orange: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--canal-black);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            padding: 16px 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-logo-text span {
+            color: var(--canal-red);
+        }
+
+        .nav-badge {
+            background: linear-gradient(135deg, var(--amplitude-blue), #4285f4);
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 24px 80px;
+            background: linear-gradient(180deg, var(--canal-black) 0%, var(--canal-dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(230, 0, 0, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--canal-gray);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--amplitude-blue), #4285f4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .hero-icons {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .hero-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-icon-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .hero-icon-circle.tealium {
+            background: linear-gradient(135deg, var(--tealium-teal), #00c4b4);
+        }
+
+        .hero-icon-circle.amplitude {
+            background: linear-gradient(135deg, var(--amplitude-blue), #4285f4);
+        }
+
+        .hero-icon-circle.replay {
+            background: linear-gradient(135deg, #9333ea, #a855f7);
+        }
+
+        .hero-icon span {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .hero-arrow {
+            font-size: 24px;
+            color: var(--text-muted);
+            align-self: center;
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 64px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-number {
+            width: 32px;
+            height: 32px;
+            background: var(--canal-red);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .section h2 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 32px 0 16px;
+            color: var(--text-primary);
+        }
+
+        .section p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        /* Architecture Diagram */
+        .architecture-diagram {
+            background: var(--canal-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 24px 0;
+        }
+
+        .architecture-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .architecture-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .architecture-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .arch-box {
+            background: var(--canal-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 24px;
+            text-align: center;
+            min-width: 140px;
+        }
+
+        .arch-box.website {
+            border-color: var(--canal-red);
+            background: rgba(230, 0, 0, 0.1);
+        }
+
+        .arch-box.tealium {
+            border-color: var(--tealium-teal);
+            background: rgba(0, 160, 175, 0.1);
+        }
+
+        .arch-box.amplitude {
+            border-color: var(--amplitude-blue);
+            background: rgba(26, 115, 232, 0.1);
+        }
+
+        .arch-box-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .arch-box-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .arch-box-sublabel {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .arch-arrow {
+            color: var(--text-muted);
+            font-size: 20px;
+        }
+
+        .arch-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .arch-connector-line {
+            width: 2px;
+            height: 24px;
+            background: var(--border-color);
+        }
+
+        .arch-connector-label {
+            font-size: 10px;
+            color: var(--success-green);
+            font-weight: 600;
+            padding: 2px 8px;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 4px;
+        }
+
+        /* Alert Boxes */
+        .alert {
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 24px 0;
+            display: flex;
+            gap: 16px;
+        }
+
+        .alert-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .alert-content h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .alert-content p {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .alert.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .alert.warning .alert-content h4 {
+            color: var(--warning-orange);
+        }
+
+        .alert.info {
+            background: rgba(26, 115, 232, 0.1);
+            border: 1px solid rgba(26, 115, 232, 0.3);
+        }
+
+        .alert.info .alert-content h4 {
+            color: var(--amplitude-blue);
+        }
+
+        .alert.success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .alert.success .alert-content h4 {
+            color: var(--success-green);
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            background: var(--canal-gray);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-filename {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .code-language {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .code-content {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .code-content pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #e6edf3;
+            white-space: pre;
+            margin: 0;
+        }
+
+        .code-content .comment {
+            color: #8b949e;
+        }
+
+        .code-content .keyword {
+            color: #ff7b72;
+        }
+
+        .code-content .string {
+            color: #a5d6ff;
+        }
+
+        .code-content .function {
+            color: #d2a8ff;
+        }
+
+        .code-content .variable {
+            color: #ffa657;
+        }
+
+        .code-content .property {
+            color: #79c0ff;
+        }
+
+        .code-content .number {
+            color: #a5d6ff;
+        }
+
+        /* Options Cards */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .option-card {
+            background: var(--canal-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s;
+        }
+
+        .option-card:hover {
+            border-color: var(--amplitude-blue);
+            transform: translateY(-2px);
+        }
+
+        .option-card.recommended {
+            border-color: var(--success-green);
+            position: relative;
+        }
+
+        .option-card.recommended::before {
+            content: 'RECOMMANDÉ';
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--success-green);
+            color: var(--canal-black);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .option-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .option-icon.a {
+            background: linear-gradient(135deg, var(--success-green), #4ade80);
+        }
+
+        .option-icon.b {
+            background: linear-gradient(135deg, var(--tealium-teal), #00c4b4);
+        }
+
+        .option-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .option-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .option-pros {
+            list-style: none;
+        }
+
+        .option-pros li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 6px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .option-pros li::before {
+            content: '✓';
+            color: var(--success-green);
+            font-weight: 600;
+        }
+
+        /* Table Styles */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 24px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--canal-gray);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--canal-dark);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .status-badge.yes {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success-green);
+        }
+
+        .status-badge.limited {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-orange);
+        }
+
+        /* Checklist */
+        .checklist {
+            background: var(--canal-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .checklist-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checklist-items {
+            list-style: none;
+        }
+
+        .checklist-items li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .checklist-items li:last-child {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            width: 20px;
+            height: 20px;
+            background: var(--success-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: white;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Steps */
+        .steps {
+            margin: 24px 0;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--amplitude-blue), #4285f4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .step-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--canal-dark);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .footer-logo span {
+            color: var(--canal-red);
+        }
+
+        .footer p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .footer-date {
+            margin-top: 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* TOC */
+        .toc {
+            background: var(--canal-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 48px;
+        }
+
+        .toc-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .toc-list li:last-child {
+            border-bottom: none;
+        }
+
+        .toc-list a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: color 0.2s;
+        }
+
+        .toc-list a:hover {
+            color: var(--text-primary);
+        }
+
+        .toc-number {
+            width: 24px;
+            height: 24px;
+            background: var(--canal-dark);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-icons {
+                flex-wrap: wrap;
+            }
+
+            .architecture-row {
+                flex-direction: column;
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="nav-logo-text">CANAL<span>+</span></div>
+                <div class="nav-badge">Guide Technique</div>
+            </div>
+            <div class="nav-links">
+                <a href="#challenge">Le Défi</a>
+                <a href="#options">Options</a>
+                <a href="#implementation">Implémentation</a>
+                <a href="#gdpr">RGPD</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                Documentation Technique
+            </div>
+            <h1>
+                Installation de <span class="highlight">Session Replay</span><br>
+                et Guides & Surveys
+            </h1>
+            <p>
+                Guide complet pour intégrer les fonctionnalités Amplitude avancées 
+                dans l'architecture Canal+ avec Tealium
+            </p>
+            <div class="hero-icons">
+                <div class="hero-icon">
+                    <div class="hero-icon-circle tealium">🏷️</div>
+                    <span>Tealium</span>
+                </div>
+                <span class="hero-arrow">+</span>
+                <div class="hero-icon">
+                    <div class="hero-icon-circle amplitude">📊</div>
+                    <span>Amplitude SDK</span>
+                </div>
+                <span class="hero-arrow">=</span>
+                <div class="hero-icon">
+                    <div class="hero-icon-circle replay">🎬</div>
+                    <span>Session Replay</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Table of Contents -->
+        <div class="toc">
+            <div class="toc-title">Table des Matières</div>
+            <ol class="toc-list">
+                <li><a href="#challenge"><span class="toc-number">1</span>Comprendre le Défi Architectural</a></li>
+                <li><a href="#options"><span class="toc-number">2</span>Options d'Installation</a></li>
+                <li><a href="#implementation"><span class="toc-number">3</span>Implémentation Détaillée</a></li>
+                <li><a href="#device-id"><span class="toc-number">4</span>Synchronisation des Device ID</a></li>
+                <li><a href="#gdpr"><span class="toc-number">5</span>Conformité RGPD/CNIL</a></li>
+                <li><a href="#coverage"><span class="toc-number">6</span>Couverture par Composant</a></li>
+            </ol>
+        </div>
+
+        <!-- Section 1: Challenge -->
+        <section id="challenge" class="section">
+            <div class="section-header">
+                <span class="section-number">1</span>
+                <h2>Comprendre le Défi Architectural</h2>
+            </div>
+
+            <p>
+                L'architecture Canal+ utilise <strong>Tealium</strong> comme gestionnaire de tags pour les données de navigation (Nav), 
+                avec un flux séparé pour les données vidéo via <strong>Switch+ → Snowflake</strong>.
+            </p>
+
+            <div class="alert warning">
+                <span class="alert-icon">⚠️</span>
+                <div class="alert-content">
+                    <h4>Point Critique</h4>
+                    <p>
+                        Session Replay et Guides & Surveys nécessitent le <strong>SDK Amplitude Browser côté client</strong> car :
+                    </p>
+                    <ul style="margin-top: 8px; padding-left: 20px; color: var(--text-secondary);">
+                        <li>Session Replay doit capturer le DOM (écran de l'utilisateur)</li>
+                        <li>Guides & Surveys doit injecter des éléments UI (modales, tooltips, enquêtes)</li>
+                        <li>Aucune de ces fonctionnalités ne peut fonctionner via le forwarding serveur de Tealium</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Architecture Diagram -->
+            <div class="architecture-diagram">
+                <div class="architecture-title">Architecture d'Intégration Recommandée</div>
+                <div class="architecture-flow">
+                    <div class="architecture-row">
+                        <div class="arch-box website">
+                            <div class="arch-box-icon">📺</div>
+                            <div class="arch-box-label">Site Web Canal+</div>
+                            <div class="arch-box-sublabel">Espace Client, etc.</div>
+                        </div>
+                    </div>
+
+                    <div class="architecture-row">
+                        <div class="arch-connector">
+                            <div class="arch-connector-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="architecture-row">
+                        <div class="arch-box tealium">
+                            <div class="arch-box-icon">🏷️</div>
+                            <div class="arch-box-label">Tealium</div>
+                            <div class="arch-box-sublabel">Events Nav</div>
+                        </div>
+                        <div class="arch-connector">
+                            <div class="arch-connector-label">MÊME DEVICE ID</div>
+                        </div>
+                        <div class="arch-box amplitude">
+                            <div class="arch-box-icon">📊</div>
+                            <div class="arch-box-label">Amplitude SDK</div>
+                            <div class="arch-box-sublabel">+ Session Replay + G&S</div>
+                        </div>
+                    </div>
+
+                    <div class="architecture-row">
+                        <div class="arch-connector">
+                            <div class="arch-connector-line"></div>
+                        </div>
+                    </div>
+
+                    <div class="architecture-row">
+                        <div class="arch-box amplitude">
+                            <div class="arch-box-icon">☁️</div>
+                            <div class="arch-box-label">Projet Amplitude</div>
+                            <div class="arch-box-sublabel">Events + Replays + Surveys</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Options -->
+        <section id="options" class="section">
+            <div class="section-header">
+                <span class="section-number">2</span>
+                <h2>Options d'Installation</h2>
+            </div>
+
+            <p>
+                Il existe deux approches pour intégrer Session Replay et Guides & Surveys avec votre architecture Tealium existante :
+            </p>
+
+            <div class="options-grid">
+                <div class="option-card recommended">
+                    <div class="option-header">
+                        <div class="option-icon a">A</div>
+                        <div class="option-title">Installation Directe du SDK</div>
+                    </div>
+                    <p class="option-description">
+                        Installer le SDK Amplitude directement sur la page, en parallèle de Tealium.
+                    </p>
+                    <ul class="option-pros">
+                        <li>Contrôle total sur l'initialisation RGPD</li>
+                        <li>Session Replay fonctionnel immédiatement</li>
+                        <li>Guides & Surveys avec toutes les fonctionnalités</li>
+                        <li>Debugging et maintenance simplifiés</li>
+                        <li>Indépendant de la configuration Tealium</li>
+                    </ul>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-header">
+                        <div class="option-icon b">B</div>
+                        <div class="option-title">Via Tealium Custom Tag</div>
+                    </div>
+                    <p class="option-description">
+                        Charger le SDK Amplitude via un tag JavaScript personnalisé dans Tealium.
+                    </p>
+                    <ul class="option-pros">
+                        <li>Centralise la gestion des tags</li>
+                        <li>Utilise les règles de déclenchement Tealium</li>
+                        <li>Cohérent avec l'architecture existante</li>
+                        <li>Un seul point de gestion</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="alert info">
+                <span class="alert-icon">💡</span>
+                <div class="alert-content">
+                    <h4>Notre Recommandation</h4>
+                    <p>
+                        L'<strong>Option A (Installation Directe)</strong> est recommandée car elle offre un meilleur contrôle 
+                        sur le consentement RGPD et simplifie le debugging. Le SDK Amplitude peut coexister sans conflit avec Tealium.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Implementation -->
+        <section id="implementation" class="section">
+            <div class="section-header">
+                <span class="section-number">3</span>
+                <h2>Implémentation Détaillée</h2>
+            </div>
+
+            <h3>Option A : Installation Directe du SDK</h3>
+
+            <p>
+                Cette approche utilise le <strong>chargement manuel des SDK</strong> (via cdn.amplitude.com/libs/) 
+                au lieu du script loader pour garantir la conformité RGPD.
+            </p>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Charger les SDK dynamiquement</h4>
+                        <p>Les scripts sont chargés uniquement après que l'utilisateur accepte les cookies.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-filename">amplitude-loader.js</span>
+                    <span class="code-language">JavaScript</span>
+                </div>
+                <div class="code-content">
+<pre><span class="comment">// Configuration</span>
+<span class="keyword">const</span> <span class="variable">AMPLITUDE_API_KEY</span> = <span class="string">'VOTRE_CLE_API'</span>;
+
+<span class="comment">// Fonction de chargement des SDK</span>
+<span class="keyword">function</span> <span class="function">loadAmplitudeSDK</span>() {
+    <span class="keyword">return new</span> <span class="function">Promise</span>((<span class="variable">resolve</span>, <span class="variable">reject</span>) => {
+        <span class="comment">// 1. Charger Analytics Browser SDK</span>
+        <span class="keyword">const</span> <span class="variable">analyticsScript</span> = document.<span class="function">createElement</span>(<span class="string">'script'</span>);
+        <span class="variable">analyticsScript</span>.<span class="property">src</span> = <span class="string">'https://cdn.amplitude.com/libs/analytics-browser-2.32.0-min.js.gz'</span>;
+        
+        <span class="variable">analyticsScript</span>.<span class="property">onload</span> = () => {
+            console.<span class="function">log</span>(<span class="string">'✅ Amplitude Analytics SDK chargé'</span>);
+            
+            <span class="comment">// 2. Charger Session Replay Plugin</span>
+            <span class="keyword">const</span> <span class="variable">replayScript</span> = document.<span class="function">createElement</span>(<span class="string">'script'</span>);
+            <span class="variable">replayScript</span>.<span class="property">src</span> = <span class="string">'https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.13.10-min.js.gz'</span>;
+            
+            <span class="variable">replayScript</span>.<span class="property">onload</span> = () => {
+                console.<span class="function">log</span>(<span class="string">'✅ Session Replay Plugin chargé'</span>);
+                
+                <span class="comment">// 3. Charger Guides & Surveys SDK</span>
+                <span class="keyword">const</span> <span class="variable">engagementScript</span> = document.<span class="function">createElement</span>(<span class="string">'script'</span>);
+                <span class="variable">engagementScript</span>.<span class="property">src</span> = <span class="string">`https://cdn.amplitude.com/script/${AMPLITUDE_API_KEY}.engagement.js`</span>;
+                
+                <span class="variable">engagementScript</span>.<span class="property">onload</span> = () => {
+                    console.<span class="function">log</span>(<span class="string">'✅ Guides & Surveys SDK chargé'</span>);
+                    <span class="function">resolve</span>();
+                };
+                
+                <span class="variable">engagementScript</span>.<span class="property">onerror</span> = () => {
+                    console.<span class="function">warn</span>(<span class="string">'⚠️ G&S non chargé (optionnel)'</span>);
+                    <span class="function">resolve</span>(); <span class="comment">// Non-bloquant</span>
+                };
+                
+                document.<span class="property">body</span>.<span class="function">appendChild</span>(<span class="variable">engagementScript</span>);
+            };
+            
+            <span class="variable">replayScript</span>.<span class="property">onerror</span> = <span class="variable">reject</span>;
+            document.<span class="property">body</span>.<span class="function">appendChild</span>(<span class="variable">replayScript</span>);
+        };
+        
+        <span class="variable">analyticsScript</span>.<span class="property">onerror</span> = <span class="variable">reject</span>;
+        document.<span class="property">body</span>.<span class="function">appendChild</span>(<span class="variable">analyticsScript</span>);
+    });
+}</pre>
+                </div>
+            </div>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Initialiser Amplitude après consentement</h4>
+                        <p>Cette fonction est appelée uniquement après que l'utilisateur clique sur "Accepter".</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-filename">amplitude-init.js</span>
+                    <span class="code-language">JavaScript</span>
+                </div>
+                <div class="code-content">
+<pre><span class="keyword">async function</span> <span class="function">initializeAmplitude</span>() {
+    <span class="comment">// Charger les SDK si pas encore fait</span>
+    <span class="keyword">await</span> <span class="function">loadAmplitudeSDK</span>();
+    
+    <span class="comment">// Ajouter le plugin Session Replay</span>
+    window.<span class="property">amplitude</span>.<span class="function">add</span>(window.<span class="property">sessionReplay</span>.<span class="function">plugin</span>({
+        <span class="property">sampleRate</span>: <span class="number">1</span>  <span class="comment">// 100% pour démo, utiliser 0.1-0.3 en production</span>
+    }));
+    
+    <span class="comment">// Ajouter le plugin Guides & Surveys (si chargé)</span>
+    <span class="keyword">if</span> (window.<span class="property">engagement</span>?.<span class="property">plugin</span>) {
+        window.<span class="property">amplitude</span>.<span class="function">add</span>(window.<span class="property">engagement</span>.<span class="function">plugin</span>());
+        console.<span class="function">log</span>(<span class="string">'✅ Guides & Surveys plugin ajouté'</span>);
+    }
+    
+    <span class="comment">// Initialiser Amplitude</span>
+    window.<span class="property">amplitude</span>.<span class="function">init</span>(<span class="variable">AMPLITUDE_API_KEY</span>, {
+        <span class="property">fetchRemoteConfig</span>: <span class="keyword">true</span>,
+        <span class="property">autocapture</span>: {
+            <span class="property">attribution</span>: <span class="keyword">true</span>,
+            <span class="property">sessions</span>: <span class="keyword">true</span>,
+            <span class="property">pageViews</span>: <span class="keyword">true</span>,
+            <span class="property">formInteractions</span>: <span class="keyword">false</span>,
+            <span class="property">fileDownloads</span>: <span class="keyword">false</span>,
+            <span class="property">elementInteractions</span>: <span class="keyword">false</span>,
+            <span class="property">frustrationInteractions</span>: <span class="keyword">true</span>  <span class="comment">// Rage clicks, dead clicks</span>
+        }
+    });
+    
+    console.<span class="function">log</span>(<span class="string">'✅ Amplitude initialisé avec Session Replay et G&S'</span>);
+}</pre>
+                </div>
+            </div>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Gérer le consentement cookies</h4>
+                        <p>Intégrer avec votre système de consentement existant.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-filename">cookie-consent.js</span>
+                    <span class="code-language">JavaScript</span>
+                </div>
+                <div class="code-content">
+<pre><span class="comment">// Vérifier le consentement au chargement de la page</span>
+<span class="keyword">async function</span> <span class="function">checkCookieConsent</span>() {
+    <span class="keyword">const</span> <span class="variable">consent</span> = localStorage.<span class="function">getItem</span>(<span class="string">'canalplus_cookie_consent'</span>);
+    
+    <span class="keyword">if</span> (<span class="variable">consent</span> === <span class="string">'accepted'</span>) {
+        <span class="comment">// Utilisateur a déjà accepté - initialiser Amplitude</span>
+        <span class="keyword">await</span> <span class="function">initializeAmplitude</span>();
+    } <span class="keyword">else</span> {
+        <span class="comment">// Afficher la modale de consentement</span>
+        <span class="function">showCookieModal</span>();
+    }
+}
+
+<span class="comment">// Appelé quand l'utilisateur clique "ACCEPTER"</span>
+<span class="keyword">async function</span> <span class="function">acceptCookies</span>() {
+    localStorage.<span class="function">setItem</span>(<span class="string">'canalplus_cookie_consent'</span>, <span class="string">'accepted'</span>);
+    <span class="function">hideCookieModal</span>();
+    <span class="keyword">await</span> <span class="function">initializeAmplitude</span>();
+}
+
+<span class="comment">// Appelé quand l'utilisateur clique "REFUSER"</span>
+<span class="keyword">function</span> <span class="function">rejectCookies</span>() {
+    localStorage.<span class="function">setItem</span>(<span class="string">'canalplus_cookie_consent'</span>, <span class="string">'rejected'</span>);
+    <span class="function">hideCookieModal</span>();
+    <span class="comment">// Aucun tracking</span>
+}
+
+<span class="comment">// Initialiser au chargement</span>
+document.<span class="function">addEventListener</span>(<span class="string">'DOMContentLoaded'</span>, <span class="variable">checkCookieConsent</span>);</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Device ID -->
+        <section id="device-id" class="section">
+            <div class="section-header">
+                <span class="section-number">4</span>
+                <h2>Synchronisation des Device ID</h2>
+            </div>
+
+            <div class="alert warning">
+                <span class="alert-icon">🔑</span>
+                <div class="alert-content">
+                    <h4>Critique : Device ID Matching</h4>
+                    <p>
+                        Si Tealium envoie également des événements au même projet Amplitude, vous <strong>DEVEZ</strong> 
+                        synchroniser les Device ID pour que les Session Replays soient correctement liés aux événements.
+                    </p>
+                </div>
+            </div>
+
+            <h3>Option 1 : Tealium → Amplitude</h3>
+            <p>Récupérer le Device ID de Tealium et le passer à Amplitude :</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-filename">device-id-from-tealium.js</span>
+                    <span class="code-language">JavaScript</span>
+                </div>
+                <div class="code-content">
+<pre><span class="comment">// Récupérer le Device ID que Tealium utilise pour Amplitude</span>
+<span class="keyword">const</span> <span class="variable">tealiumDeviceId</span> = utag.<span class="property">data</span>[<span class="string">'amplitude_device_id'</span>];
+<span class="comment">// OU selon votre configuration Tealium</span>
+<span class="keyword">const</span> <span class="variable">tealiumDeviceId</span> = utag.<span class="property">data</span>[<span class="string">'tealium_visitor_id'</span>];
+
+<span class="comment">// Passer ce Device ID à Amplitude</span>
+window.<span class="property">amplitude</span>.<span class="function">init</span>(<span class="variable">AMPLITUDE_API_KEY</span>, {
+    <span class="property">deviceId</span>: <span class="variable">tealiumDeviceId</span>,  <span class="comment">// Forcer le même Device ID</span>
+    <span class="property">fetchRemoteConfig</span>: <span class="keyword">true</span>,
+    <span class="comment">// ... autres configurations</span>
+});</pre>
+                </div>
+            </div>
+
+            <h3>Option 2 : Amplitude → Tealium</h3>
+            <p>Laisser Amplitude générer le Device ID, puis le synchroniser vers Tealium :</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-filename">device-id-to-tealium.js</span>
+                    <span class="code-language">JavaScript</span>
+                </div>
+                <div class="code-content">
+<pre><span class="comment">// Initialiser Amplitude normalement</span>
+window.<span class="property">amplitude</span>.<span class="function">init</span>(<span class="variable">AMPLITUDE_API_KEY</span>, { <span class="comment">/* config */</span> });
+
+<span class="comment">// Récupérer le Device ID généré par Amplitude</span>
+<span class="keyword">const</span> <span class="variable">ampDeviceId</span> = window.<span class="property">amplitude</span>.<span class="function">getDeviceId</span>();
+
+<span class="comment">// Passer ce Device ID à Tealium pour cohérence</span>
+utag.<span class="property">data</span>[<span class="string">'amplitude_device_id'</span>] = <span class="variable">ampDeviceId</span>;
+
+<span class="comment">// Ou utiliser utag.link pour envoyer immédiatement</span>
+utag.<span class="function">link</span>({
+    <span class="property">amplitude_device_id</span>: <span class="variable">ampDeviceId</span>
+});</pre>
+                </div>
+            </div>
+
+            <div class="alert success">
+                <span class="alert-icon">✅</span>
+                <div class="alert-content">
+                    <h4>Résultat Attendu</h4>
+                    <p>
+                        Avec la synchronisation correcte, tous les événements (de Tealium ET du SDK direct) 
+                        apparaîtront dans le même user journey, et les Session Replays seront correctement liés.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: GDPR -->
+        <section id="gdpr" class="section">
+            <div class="section-header">
+                <span class="section-number">5</span>
+                <h2>Conformité RGPD/CNIL</h2>
+            </div>
+
+            <p>
+                En tant qu'entreprise française, Canal+ doit respecter le RGPD et les recommandations de la CNIL 
+                concernant les cookies et le tracking.
+            </p>
+
+            <div class="checklist">
+                <div class="checklist-title">🇫🇷 Checklist CNIL</div>
+                <ul class="checklist-items">
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <div>
+                            <strong>Chargement manuel des SDK</strong><br>
+                            <span style="font-size: 13px; color: var(--text-muted);">
+                                Utiliser cdn.amplitude.com/libs/ au lieu du script loader qui auto-initialise
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <div>
+                            <strong>Modale de consentement cookies</strong><br>
+                            <span style="font-size: 13px; color: var(--text-muted);">
+                                Afficher AVANT tout tracking avec options Accepter/Refuser équivalentes
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <div>
+                            <strong>SDK inactif jusqu'au consentement</strong><br>
+                            <span style="font-size: 13px; color: var(--text-muted);">
+                                amplitude.init() appelé UNIQUEMENT après clic sur Accepter
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <div>
+                            <strong>Consentement stocké (max 13 mois)</strong><br>
+                            <span style="font-size: 13px; color: var(--text-muted);">
+                                Utiliser localStorage avec expiration conforme aux recommandations CNIL
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <div>
+                            <strong>Session Replay : masquer données sensibles</strong><br>
+                            <span style="font-size: 13px; color: var(--text-muted);">
+                                Exclure champs de mot de passe, données bancaires, informations personnelles
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        <div>
+                            <strong>User ID hashé</strong><br>
+                            <span style="font-size: 13px; color: var(--text-muted);">
+                                Utiliser SHA-256 pour hasher les emails avant de les envoyer comme User ID
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="alert info">
+                <span class="alert-icon">📋</span>
+                <div class="alert-content">
+                    <h4>Pourquoi le Chargement Manuel ?</h4>
+                    <p>
+                        Le <strong>script loader</strong> (<code>cdn.amplitude.com/script/API_KEY.js</code>) 
+                        auto-initialise immédiatement au chargement de la page = violation RGPD.<br><br>
+                        Le <strong>chargement manuel</strong> (<code>cdn.amplitude.com/libs/</code>) 
+                        charge le code mais reste inactif jusqu'à l'appel explicite de <code>amplitude.init()</code>.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Coverage -->
+        <section id="coverage" class="section">
+            <div class="section-header">
+                <span class="section-number">6</span>
+                <h2>Couverture par Composant</h2>
+            </div>
+
+            <p>
+                Voici comment Session Replay et Guides & Surveys fonctionnent avec les différents composants 
+                de votre architecture :
+            </p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Composant</th>
+                            <th>Session Replay</th>
+                            <th>Guides & Surveys</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Nav (via Tealium)</strong></td>
+                            <td><span class="status-badge yes">✓ Oui</span></td>
+                            <td><span class="status-badge yes">✓ Oui</span></td>
+                            <td>Installer SDK sur les mêmes pages</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Espace Client</strong></td>
+                            <td><span class="status-badge yes">✓ Parfait</span></td>
+                            <td><span class="status-badge yes">✓ Parfait</span></td>
+                            <td>Idéal pour les flows d'abonnement</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lecteur Vidéo</strong></td>
+                            <td><span class="status-badge limited">⚠️ Limité</span></td>
+                            <td><span class="status-badge yes">✓ Oui</span></td>
+                            <td>Capture l'UI autour, pas le contenu vidéo</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Données Snowflake</strong></td>
+                            <td><span class="status-badge limited">N/A</span></td>
+                            <td><span class="status-badge limited">N/A</span></td>
+                            <td>Backend data - pas de capture client</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Zones Prioritaires pour Session Replay</h3>
+
+            <div class="options-grid">
+                <div class="option-card">
+                    <div class="option-header">
+                        <div class="option-icon a">📋</div>
+                        <div class="option-title">Flows de Résiliation</div>
+                    </div>
+                    <p class="option-description">
+                        Comprendre pourquoi les utilisateurs annulent et identifier les points de friction.
+                    </p>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-header">
+                        <div class="option-icon b">💳</div>
+                        <div class="option-title">Gestion Paiement</div>
+                    </div>
+                    <p class="option-description">
+                        Identifier les erreurs de paiement et les abandons dans le tunnel de conversion.
+                    </p>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-header">
+                        <div class="option-icon a">🔧</div>
+                        <div class="option-title">Support Technique</div>
+                    </div>
+                    <p class="option-description">
+                        Voir exactement ce que les utilisateurs voient quand ils signalent un problème.
+                    </p>
+                </div>
+
+                <div class="option-card">
+                    <div class="option-header">
+                        <div class="option-icon b">📺</div>
+                        <div class="option-title">Changement d'Offre</div>
+                    </div>
+                    <p class="option-description">
+                        Analyser le parcours d'upgrade/downgrade et optimiser les conversions.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Notes -->
+        <section class="section">
+            <div class="alert success">
+                <span class="alert-icon">🚀</span>
+                <div class="alert-content">
+                    <h4>Prochaines Étapes</h4>
+                    <p>
+                        1. Valider l'approche avec votre équipe Tealium<br>
+                        2. Identifier les pages prioritaires pour le déploiement<br>
+                        3. Configurer la synchronisation Device ID<br>
+                        4. Tester en environnement staging<br>
+                        5. Déployer progressivement en production
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">CANAL<span>+</span> × Amplitude</div>
+            <p>
+                Guide d'installation Session Replay et Guides & Surveys<br>
+                pour l'architecture Canal+ avec Tealium
+            </p>
+            <div class="footer-date">
+                📅 Février 2026 | Préparé par Amplitude Professional Services
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add active state to nav links on scroll
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.style.color = link.getAttribute('href') === `#${current}` 
+                    ? 'var(--text-primary)' 
+                    : 'var(--text-secondary)';
+            });
+        });
+    </script>
+</body>
+</html>
+
